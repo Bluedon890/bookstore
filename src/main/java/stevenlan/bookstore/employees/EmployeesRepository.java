@@ -1,0 +1,19 @@
+package stevenlan.bookstore.employees;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface EmployeesRepository extends JpaRepository<Employees, Long>{
+
+    @Query("SELECT e FROM Employees e WHERE e.account = ?1")
+    Optional<Employees> findEmployeesByAccount(String account);
+
+    @Query("SELECT e.account, e.password, e.name, e.email, e.phoneNumber FROM Employees e WHERE e.id = :id")
+    List<Object[]> findEmployeeById (Long id);
+
+}
