@@ -25,7 +25,7 @@ public class AdminEmployeesController {
         this.employeesService = employeesService;
     }
 
-    @GetMapping(path = "{employeesId}")
+    @PostMapping(path = "{employeesId}")
 	public ArrayList<String> getEmployees(
         @PathVariable("employeesId") List<Long> ids){
 		return employeesService.getEmployeesById(ids);

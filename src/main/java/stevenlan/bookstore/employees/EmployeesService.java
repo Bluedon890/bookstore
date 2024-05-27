@@ -7,23 +7,22 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 
 @Service
+@RequiredArgsConstructor
 public class EmployeesService {
 
     private final EmployeesRepository employeesRepository;
+    private final PasswordEncoder passwordEncoder;
 
     
-    @Autowired
-    public EmployeesService(EmployeesRepository employeesRepository) {
-        this.employeesRepository = employeesRepository;
-    }
-
     
 
     public ArrayList<String> getEmployeesById(List<Long> ids){
@@ -85,7 +84,7 @@ public class EmployeesService {
                 employees.setName(name);
             }
             if(password != null && password.length() > 0 && !Objects.equals(employees.getPassword(), password)){
-                employees.setPassword(password);
+                employees.setPassword(passwordEncoder.encode(password));
             }
             if(email != null && email.length() > 0 && !Objects.equals(employees.getEmail(), email)){
                 employees.setEmail(email);
