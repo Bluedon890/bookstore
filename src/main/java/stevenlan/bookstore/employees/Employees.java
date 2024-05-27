@@ -32,7 +32,7 @@ public class Employees implements UserDetails{
     @Enumerated(value = EnumType.STRING)
     private Role role;
 
-    @OneToMany(mappedBy = "employees")
+    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "employees")
     private List<Token> tokens;
     
     public Employees() {

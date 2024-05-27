@@ -5,6 +5,7 @@ package stevenlan.bookstore.jwt.service;
 import java.util.List;
 
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -97,7 +98,8 @@ public class AuthenticationService {
 
     //登入
     public AuthenticationResponse authenticate(Employees request) {
-       authenticationManager.authenticate(
+        try {
+            authenticationManager.authenticate(
                new UsernamePasswordAuthenticationToken(
                        request.getUsername(),
                        request.getPassword()
@@ -112,10 +114,16 @@ public class AuthenticationService {
        saveEmployeesToken(token, employees);
 
        return new AuthenticationResponse(token, "登入成功");
+    } catch (BadCredentialsException e) {
+        return new AuthenticationResponse(null, "使用者名稱或密碼錯誤");
+    } catch (Exception e) {
+        return new AuthenticationResponse(null, "登入失敗：" + e.getMessage());
+    }
+       
     }
     
     //存token
-    private void saveEmployeesToken(String jwt, Employees employees) {
+    public void saveEmployeesToken(String jwt, Employees employees) {
         Token token = new Token();
         token.setToken(jwt);
         token.setLoggedout(false);
@@ -124,7 +132,7 @@ public class AuthenticationService {
     }
 
     //在產生新token前將舊的設定為loggedout
-    private void setAllOldTokenLoggedout(Employees employees) {
+    public void setAllOldTokenLoggedout(Employees employees) {
         List<Token> validTokensList = tokenRepository.findAllTokenByEmployee(employees.getId());
         if(!validTokensList.isEmpty()){
             validTokensList.forEach(t->{

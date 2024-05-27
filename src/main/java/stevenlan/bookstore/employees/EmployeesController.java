@@ -42,23 +42,23 @@ public class EmployeesController {
     //     employeesService.addNewEmployees(employees);
     // }
 
-    @DeleteMapping(path = "{employeesId}")
-    public void deleteEmployees(
-        @PathVariable("employeesId") List<Long> ids){
-        employeesService.deleteEmployees(ids);
-    }
+    // @DeleteMapping(path = "{employeesId}")
+    // public void deleteEmployees(
+    //     @PathVariable("employeesId") List<Long> ids){
+    //     employeesService.deleteEmployees(ids);
+    // }
 
-    @PutMapping(path = "{employeesId}")
-    public void updateEmployees(
-        @PathVariable("employeesId") Long employeesId,
-        @RequestParam(required = false) String name,
-        @RequestParam(required = false) String account,
-        @RequestParam(required = false) String password,
-        @RequestParam(required = false) String email,
-        @RequestParam(required = false) String phoneNumber){
-            employeesService.updateEmployees(employeesId,name,account,password,email,phoneNumber);
+    // @PutMapping(path = "{employeesId}")
+    // public void updateEmployees(
+    //     @PathVariable("employeesId") Long employeesId,
+    //     @RequestParam(required = false) String name,
+    //     @RequestParam(required = false) String account,
+    //     @RequestParam(required = false) String password,
+    //     @RequestParam(required = false) String email,
+    //     @RequestParam(required = false) String phoneNumber){
+    //         employeesService.updateEmployees(employeesId,name,account,password,email,phoneNumber);
 
-    }
+    // }
 
 }
 

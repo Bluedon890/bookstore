@@ -27,6 +27,7 @@ public class BooksController {
         this.booksService = booksService;
     }
 
+    //改post會出問題
     @GetMapping
     public List<Books> getAllBooks(){
         return booksService.getAllBooks();

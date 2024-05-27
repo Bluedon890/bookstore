@@ -67,7 +67,8 @@ public class JwtService {
                 .builder()
                 .subject(employees.getUsername())
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + 24*60*60*1000 ))
+                //10分鐘
+                .expiration(new Date(System.currentTimeMillis() + 10*60*1000 ))
                 .signWith(getSigninKey())
                 .compact();
 
