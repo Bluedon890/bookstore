@@ -33,9 +33,9 @@ public class AdminEmployeesController {
 	}
 
     @DeleteMapping(path = "{employeesId}")
-    public void deleteEmployees(
-        @PathVariable("employeesId") List<Long> ids){
-        employeesService.deleteEmployees(ids);
+    public String deleteEmployees(
+        @PathVariable("employeesId") List<Long> ids,HttpServletRequest request){
+        return employeesService.deleteEmployees(ids, request);
     }
 
     @PutMapping(path = "{employeesId}")

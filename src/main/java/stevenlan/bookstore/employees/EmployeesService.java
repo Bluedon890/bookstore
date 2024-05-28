@@ -30,7 +30,6 @@ public class EmployeesService {
     public ArrayList<String> getEmployeesById(List<Long> ids){
         ArrayList<String> employeesInfo = new ArrayList<>();
         for(Long id:ids){
-
             employeesInfo.add(getEmployeeById(id));
         }
         return employeesInfo;
@@ -63,11 +62,11 @@ public class EmployeesService {
     //     }
     //     employeesRepository.save(employees);
     // }
-    public void deleteEmployees(List<Long> ids){
+    public String deleteEmployees(List<Long> ids, HttpServletRequest request){
         for(Long id : ids){
             deleteEmployeesById(id);
         }
-        // return tokenGenerate(request);
+        return tokenGenerate(request);
     }
 
     public void deleteEmployeesById(Long employeesId){
