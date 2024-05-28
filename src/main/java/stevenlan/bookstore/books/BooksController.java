@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 
 
 
@@ -29,29 +31,35 @@ public class BooksController {
 
     //改post會出問題
     @GetMapping
-    public List<Books> getAllBooks(){
-        return booksService.getAllBooks();
+    public String getAllBooks(HttpServletRequest request){
+        return booksService.getAllBooks(request);
+    }
+
+    @PostMapping(path = "{bookIds}")
+    public String getBooksByIds(@PathVariable("bookIds") List<Long> booksId, HttpServletRequest request){
+        return booksService.getBooksByIds(booksId, request);
     }
 
     @PostMapping
-    public void addNewBooks(@RequestBody Books books){
-        booksService.addNewBooks(books);
+    public String addNewBooks(@RequestBody Books books, HttpServletRequest request){
+        return booksService.addNewBooks(books,request);
     }
 
-    @DeleteMapping(path = "{booksId}")
-    public void deleteBooks(
-        @PathVariable("booksId") Long booksId){
-            booksService.deleteBooks(booksId);
+    @DeleteMapping(path = "{booksIds}")
+    public String deleteBooks(
+        @PathVariable("booksIds") List<Long> bookIds, HttpServletRequest request){
+            return booksService.deleteBooks(bookIds,request);
     }
 
-    @PutMapping(path = "{booksId}")
-    public void updateBooks(
-        @PathVariable("booksId") Long booksId,
+    @PutMapping(path = "{bookId}")
+    public String updateBooks(
+        @PathVariable("bookId") Long booksId,
         @RequestParam(required = false) String title,
         @RequestParam(required = false) String author,
         @RequestParam(required = false) String description,
         @RequestParam(required = false) Integer listPrice,
-        @RequestParam(required = false) Integer salePrice){
-            booksService.updateBooks(booksId,title,author,description,listPrice,salePrice);
+        @RequestParam(required = false) Integer salePrice,
+        HttpServletRequest request){
+            return booksService.updateBooks(booksId,title,author,description,listPrice,salePrice,request);
     }
 }

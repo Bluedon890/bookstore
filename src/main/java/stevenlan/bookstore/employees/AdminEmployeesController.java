@@ -27,15 +27,14 @@ public class AdminEmployeesController {
 
     @PostMapping(path = "{employeesId}")
 	public ArrayList<String> getEmployees(
-        @PathVariable("employeesId") List<Long> ids){
-		return employeesService.getEmployeesById(ids);
-		
+        @PathVariable("employeesId") List<Long> ids, HttpServletRequest request){
+		return employeesService.getEmployeesByIds(ids, request);
 	}
 
     @DeleteMapping(path = "{employeesId}")
     public String deleteEmployees(
         @PathVariable("employeesId") List<Long> ids,HttpServletRequest request){
-        return employeesService.deleteEmployees(ids, request);
+        return employeesService.deleteEmployeesByIds(ids, request);
     }
 
     @PutMapping(path = "{employeesId}")
@@ -47,7 +46,7 @@ public class AdminEmployeesController {
         @RequestParam(required = false) String email,
         @RequestParam(required = false) String phoneNumber,
         HttpServletRequest request){
-            return employeesService.updateEmployees(employeesId,name,account,password,email,phoneNumber,request);
+            return employeesService.updateEmployee(employeesId,name,account,password,email,phoneNumber,request);
 
     }
 

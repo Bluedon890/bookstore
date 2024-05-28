@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import org.springframework.lang.NonNull;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -27,14 +26,17 @@ public class EmployeesService {
 
     private final AuthenticationService authenticationService;
 
-    public ArrayList<String> getEmployeesById(List<Long> ids){
+    //查看多筆資料
+    public ArrayList<String> getEmployeesByIds(List<Long> ids, HttpServletRequest request){
         ArrayList<String> employeesInfo = new ArrayList<>();
         for(Long id:ids){
             employeesInfo.add(getEmployeeById(id));
         }
+        employeesInfo.add(tokenGenerate(request));
         return employeesInfo;
     }
 
+    //查看單筆資料
     public String getEmployeeById(Long id){
 		
         List<Object[]> resultList = employeesRepository.findEmployeeById(id);
@@ -62,15 +64,18 @@ public class EmployeesService {
     //     }
     //     employeesRepository.save(employees);
     // }
-    public String deleteEmployees(List<Long> ids, HttpServletRequest request
+
+    //刪除多筆資料
+    public String deleteEmployeesByIds(List<Long> ids, HttpServletRequest request
     ){
         for(Long id : ids){
-            deleteEmployeesById(id);
+            deleteEmployeeById(id);
         }
         return tokenGenerate(request);
     }
 
-    public void deleteEmployeesById(Long employeesId){
+    //刪除單筆資料
+    public void deleteEmployeeById(Long employeesId){
         boolean exists = employeesRepository.existsById(employeesId);
         if(!exists){
             throw new IllegalStateException("this id does not exists");
@@ -79,7 +84,7 @@ public class EmployeesService {
     }
 
     @Transactional
-    public String updateEmployees(
+    public String updateEmployee(
         Long employeesId, String name, String account, String password, String email, String phoneNumber
                 ,HttpServletRequest request
                 ){
@@ -107,11 +112,7 @@ public class EmployeesService {
 
     public String tokenGenerate(HttpServletRequest request){
 
-        String authHeader = request.getHeader("Authorization");
-        
-        String token = authHeader.substring(7);
-        String username = jwtService.extractUsername(token);
-        Employees employees = employeesRepository.findEmployeesByAccount(username).orElseThrow();
+        Employees employees = findEmployeeByRequest(request);
         String newToken = jwtService.generateToken(employees);
 
         authenticationService.setAllOldTokenLoggedout(employees);
@@ -119,5 +120,14 @@ public class EmployeesService {
         authenticationService.saveEmployeesToken(newToken, employees);
 
         return newToken;
+    }
+
+    public Employees findEmployeeByRequest(HttpServletRequest request) {
+        String authHeader = request.getHeader("Authorization");
+        
+        String token = authHeader.substring(7);
+        String username = jwtService.extractUsername(token);
+        Employees employees = employeesRepository.findEmployeesByAccount(username).orElseThrow();
+        return employees;
     }        
 }
