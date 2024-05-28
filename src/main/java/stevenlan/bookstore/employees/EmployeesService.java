@@ -62,7 +62,8 @@ public class EmployeesService {
     //     }
     //     employeesRepository.save(employees);
     // }
-    public String deleteEmployees(List<Long> ids, HttpServletRequest request){
+    public String deleteEmployees(List<Long> ids, HttpServletRequest request
+    ){
         for(Long id : ids){
             deleteEmployeesById(id);
         }

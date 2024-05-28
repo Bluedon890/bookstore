@@ -39,13 +39,16 @@ public class SecurityConfig {
         this.customLogoutHandler = customLogoutHandler;
     }
 
+    private final static String[] WHITE_LISTS_URL = {"/v1/login/**","/v1/employeesregister/**"
+    ,"/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html","/swagger-ui.html/**"};
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
-                        req->req.requestMatchers("/v1/login/**","/v1/employeesregister/**")
+                        req->req.requestMatchers(WHITE_LISTS_URL)
                                 .permitAll()
                                 .requestMatchers(
                                     "/admin_only/**",
@@ -85,5 +88,8 @@ public class SecurityConfig {
         return configuration.getAuthenticationManager();
     }
 
-
+    
 }
+
+
+
