@@ -3,7 +3,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -59,7 +58,7 @@ public class BooksService {
     public String deleteBooks(List<Long> BookIds, HttpServletRequest request){
         for(Long id : BookIds){
             deleteBook(id);
-        }
+        }   
         return employeesService.tokenGenerate(request);
     }
 

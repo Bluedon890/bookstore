@@ -1,16 +1,17 @@
 package stevenlan.bookstore.books;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 
-
+@Builder
 @Entity
-@Table(name = "書本")
+@Table(name = "Books")
 public class Books {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
-    @Column(name = "書本id")
+    // @Column(name = "書本id")
     private Long id;
     private String title;
     private String author;
