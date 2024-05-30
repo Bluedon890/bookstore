@@ -19,10 +19,9 @@ import stevenlan.bookstore.jwt.service.JwtService;
 public class EmployeesService {
 
     private final EmployeesRepository employeesRepository;
+    
     private final PasswordEncoder passwordEncoder;
 
-    
-    
     private final JwtService jwtService;
 
     private final AuthenticationService authenticationService;
