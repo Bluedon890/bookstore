@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.servlet.http.HttpServletRequest;
+import stevenlan.bookstore.jwt.entity.AuthenticationResponse;
 
 @RestController
 @RequestMapping(path="api/v1/employees/admin")
@@ -38,7 +40,7 @@ public class AdminEmployeesController {
     }
 
     @PutMapping(path = "{employeesId}")
-    public String updateEmployees(
+    public ResponseEntity<AuthenticationResponse> updateEmployees(
         @PathVariable("employeesId") Long employeesId,
         @RequestParam(required = false) String name,
         @RequestParam(required = false) String account,
@@ -46,7 +48,7 @@ public class AdminEmployeesController {
         @RequestParam(required = false) String email,
         @RequestParam(required = false) String phoneNumber,
         HttpServletRequest request){
-            return employeesService.updateEmployee(employeesId,name,account,password,email,phoneNumber,request);
+            return ResponseEntity.ok(employeesService.updateEmployee(employeesId,name,account,password,email,phoneNumber,request));
 
     }
 

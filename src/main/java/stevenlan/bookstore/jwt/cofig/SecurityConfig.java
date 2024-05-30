@@ -3,6 +3,7 @@ package stevenlan.bookstore.jwt.cofig;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -13,9 +14,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import stevenlan.bookstore.employees.EmployeesServiceImpl;
 import stevenlan.bookstore.jwt.filter.JwtAuthenticationFilter;
 
@@ -23,6 +26,7 @@ import stevenlan.bookstore.jwt.filter.JwtAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
 
     private final EmployeesServiceImpl empServiceImp;
@@ -31,13 +35,9 @@ public class SecurityConfig {
 
     private final CustomLogoutHandler customLogoutHandler;
     
+    private final CustomAccessDeniedHandler customAccessDeniedHandler;
 
-    public SecurityConfig(EmployeesServiceImpl empServiceImp, JwtAuthenticationFilter jwtAuthenticationFilter,
-            CustomLogoutHandler customLogoutHandler) {
-        this.empServiceImp = empServiceImp;
-        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
-        this.customLogoutHandler = customLogoutHandler;
-    }
+    
 
     private final static String[] WHITE_LISTS_URL = {"/v1/login/**","/v1/employeesregister/**"
     ,"/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html","/swagger-ui.html/**"};
@@ -57,7 +57,15 @@ public class SecurityConfig {
                                                 .hasAuthority("ADMIN")
                                 .anyRequest()
                                 .authenticated()
-                ).userDetailsService(empServiceImp)
+                )
+                .userDetailsService(empServiceImp)
+                .exceptionHandling(e -> e.accessDeniedHandler(customAccessDeniedHandler)
+                        .authenticationEntryPoint((request, response, authException) -> {
+                            response.setCharacterEncoding("UTF-8");
+                            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                            response.getWriter().write("無效的驗證碼,請重新輸入或登入");
+                        })
+                        )
                 .sessionManagement(session->session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
@@ -66,16 +74,8 @@ public class SecurityConfig {
                         .logoutSuccessHandler(
                             (requset, response, authentication) -> SecurityContextHolder.clearContext()
                         )
-                    )
-                    .exceptionHandling(exceptionHandling -> exceptionHandling
-                    .authenticationEntryPoint((request, response, authException) -> {
-                        response.setContentType("application/json");
-                        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                        response.getWriter().write("驗證失敗: " + authException.getMessage());
-                    })
-            )
-                .build();
-
+                )
+            .build();
     }
 
     @Bean
@@ -87,6 +87,8 @@ public class SecurityConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
     }
+
+    
 
     
 }

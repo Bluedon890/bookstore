@@ -26,7 +26,7 @@ public class AuthenticationResponse {
         this.message = message;
     }
 
-    public AuthenticationResponse(String token, String message) {
+    public  AuthenticationResponse(String token, String message) {
         this.token = token;
         this.message = message;
     }

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import stevenlan.bookstore.jwt.entity.AuthenticationResponse;
 import stevenlan.bookstore.jwt.service.AuthenticationService;
 import stevenlan.bookstore.jwt.service.JwtService;
 
@@ -84,7 +85,7 @@ public class EmployeesService {
     }
 
     @Transactional
-    public String updateEmployee(
+    public AuthenticationResponse updateEmployee(
         Long employeesId, String name, String account, String password, String email, String phoneNumber
                 ,HttpServletRequest request
                 ){
@@ -107,7 +108,7 @@ public class EmployeesService {
                 employees.setAccount(account);
             }
 
-            return tokenGenerate(request);
+            return new AuthenticationResponse(tokenGenerate(request), "更新成功") ;
         }
 
     public String tokenGenerate(HttpServletRequest request){
