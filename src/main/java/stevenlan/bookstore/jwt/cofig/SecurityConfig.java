@@ -17,8 +17,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import stevenlan.bookstore.employees.EmployeesServiceImpl;
 import stevenlan.bookstore.jwt.filter.JwtAuthenticationFilter;
+import stevenlan.bookstore.serviceImpl.EmployeesDetailsService;
 
 
 
@@ -27,7 +27,7 @@ import stevenlan.bookstore.jwt.filter.JwtAuthenticationFilter;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final EmployeesServiceImpl empServiceImp;
+    private final EmployeesDetailsService empServiceImp;
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 

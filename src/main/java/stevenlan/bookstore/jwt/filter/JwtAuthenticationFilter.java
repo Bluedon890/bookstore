@@ -1,8 +1,7 @@
 package stevenlan.bookstore.jwt.filter;
 
-import stevenlan.bookstore.employees.EmployeesServiceImpl;
 import stevenlan.bookstore.jwt.service.JwtService;
-
+import stevenlan.bookstore.serviceImpl.EmployeesDetailsService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,10 +20,10 @@ import java.io.IOException;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
-    private final EmployeesServiceImpl userDetailsService;
+    private final EmployeesDetailsService userDetailsService;
 
 
-    public JwtAuthenticationFilter(JwtService jwtService, EmployeesServiceImpl userDetailsService) {
+    public JwtAuthenticationFilter(JwtService jwtService, EmployeesDetailsService userDetailsService) {
         this.jwtService = jwtService;
         this.userDetailsService = userDetailsService;
     }

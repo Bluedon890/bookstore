@@ -1,4 +1,4 @@
-package stevenlan.bookstore.employees;
+package stevenlan.bookstore.serviceImpl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,13 +10,15 @@ import org.springframework.stereotype.Service;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import stevenlan.bookstore.entity.Employees;
 import stevenlan.bookstore.jwt.entity.AuthenticationResponse;
 import stevenlan.bookstore.jwt.service.AuthenticationService;
 import stevenlan.bookstore.jwt.service.JwtService;
+import stevenlan.bookstore.repository.EmployeesRepository;
 
 @Service
 @RequiredArgsConstructor
-public class EmployeesService {
+public class EmployeesServiceImpl {
 
     private final EmployeesRepository employeesRepository;
     

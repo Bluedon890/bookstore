@@ -16,7 +16,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import stevenlan.bookstore.employees.EmployeesService;
+import lombok.val;
+import stevenlan.bookstore.entity.Books;
+import stevenlan.bookstore.repository.BooksRepository;
+import stevenlan.bookstore.serviceImpl.BooksServiceImpl;
+import stevenlan.bookstore.serviceImpl.EmployeesServiceImpl;
 
 @ExtendWith(MockitoExtension.class)
 public class BooksServiceTest {
@@ -25,10 +29,10 @@ public class BooksServiceTest {
     private BooksRepository booksRepository;
 
     @Mock
-    private EmployeesService employeesService;
+    private EmployeesServiceImpl employeesService;
 
     @InjectMocks
-    private BooksService booksService;
+    private BooksServiceImpl booksService;
 
     private final Books book = Books.builder()
                 .title("apple")
@@ -60,6 +64,17 @@ public class BooksServiceTest {
         verify(booksRepository, times(1)).save(book);
     }
 
-    
+    @Test
+    public void should_Update_When_BooksExsist(){
+        Books existingBook = new Books();
+        existingBook.setId(1L);
+        when(booksRepository.findById(existingBook.getId())).thenReturn(Optional.of(existingBook));
+        booksService.updateBooks(1L, book);
+        assertEquals(book.getTitle(), existingBook.getTitle());
+        assertEquals(book.getAuthor(), existingBook.getAuthor());
+        assertEquals(book.getDescription(), existingBook.getDescription());
+        assertEquals(book.getListPrice(), existingBook.getListPrice());
+        assertEquals(book.getSalePrice(), existingBook.getSalePrice());
+    }
 
 }

@@ -1,4 +1,4 @@
-package stevenlan.bookstore.employees;
+package stevenlan.bookstore.entity;
 
 import java.util.Collection;
 import java.util.List;

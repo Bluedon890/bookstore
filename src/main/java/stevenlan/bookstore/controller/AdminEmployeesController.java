@@ -1,4 +1,4 @@
-package stevenlan.bookstore.employees;
+package stevenlan.bookstore.controller;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,28 +15,29 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.servlet.http.HttpServletRequest;
 import stevenlan.bookstore.jwt.entity.AuthenticationResponse;
+import stevenlan.bookstore.serviceImpl.EmployeesServiceImpl;
 
 @RestController
 @RequestMapping(path="api/v1/employees/admin")
 public class AdminEmployeesController {
 
-    private final EmployeesService employeesService;
+    private final EmployeesServiceImpl EmployeesServiceImpl;
     
     @Autowired
-    public AdminEmployeesController(EmployeesService employeesService) {
-        this.employeesService = employeesService;
+    public AdminEmployeesController(EmployeesServiceImpl EmployeesServiceImpl) {
+        this.EmployeesServiceImpl = EmployeesServiceImpl;
     }
 
     @PostMapping(path = "{employeesId}")
 	public ArrayList<String> getEmployees(
         @PathVariable("employeesId") List<Long> ids, HttpServletRequest request){
-		return employeesService.getEmployeesByIds(ids, request);
+		return EmployeesServiceImpl.getEmployeesByIds(ids, request);
 	}
 
     @DeleteMapping(path = "{employeesId}")
     public String deleteEmployees(
         @PathVariable("employeesId") List<Long> ids,HttpServletRequest request){
-        return employeesService.deleteEmployeesByIds(ids, request);
+        return EmployeesServiceImpl.deleteEmployeesByIds(ids, request);
     }
 
     @PutMapping(path = "{employeesId}")
@@ -48,7 +49,7 @@ public class AdminEmployeesController {
         @RequestParam(required = false) String email,
         @RequestParam(required = false) String phoneNumber,
         HttpServletRequest request){
-            return ResponseEntity.ok(employeesService.updateEmployee(employeesId,name,account,password,email,phoneNumber,request));
+            return ResponseEntity.ok(EmployeesServiceImpl.updateEmployee(employeesId,name,account,password,email,phoneNumber,request));
 
     }
 

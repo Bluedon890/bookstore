@@ -1,4 +1,4 @@
-package stevenlan.bookstore.books;
+package stevenlan.bookstore.config;
 
 // import java.util.List;
 

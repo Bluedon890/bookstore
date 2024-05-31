@@ -1,4 +1,4 @@
-package stevenlan.bookstore.employees;
+package stevenlan.bookstore.controller;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,14 +12,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.servlet.http.HttpServletRequest;
+import stevenlan.bookstore.serviceImpl.EmployeesServiceImpl;
 
 @RestController
 @RequestMapping(path="api/v1/employees")
 public class EmployeesController {
 
-    private final EmployeesService employeesService;
+    private final EmployeesServiceImpl employeesService;
     
-    public EmployeesController(EmployeesService employeesService) {
+    public EmployeesController(EmployeesServiceImpl employeesService) {
         this.employeesService = employeesService;
     }
 

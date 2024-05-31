@@ -11,6 +11,9 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import stevenlan.bookstore.controller.BooksController;
+import stevenlan.bookstore.serviceImpl.BooksServiceImpl;
+
 @WebMvcTest(controllers = BooksController.class)
 @AutoConfigureMockMvc(addFilters = false)
 @ExtendWith(MockitoExtension.class)
@@ -19,7 +22,7 @@ public class BooksControllerTests {
     private MockMvc mockMvc;
 
     @MockBean
-    private BooksService booksService;
+    private BooksServiceImpl booksService;
 
     @Autowired
     private ObjectMapper objectMapper;

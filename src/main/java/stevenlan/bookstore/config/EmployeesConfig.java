@@ -1,4 +1,4 @@
-package stevenlan.bookstore.employees;
+package stevenlan.bookstore.config;
 
 import java.util.List;
 import org.springframework.boot.CommandLineRunner;
@@ -7,6 +7,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import lombok.RequiredArgsConstructor;
+import stevenlan.bookstore.entity.Employees;
+import stevenlan.bookstore.entity.Role;
+import stevenlan.bookstore.repository.EmployeesRepository;
 
 @Configuration
 @RequiredArgsConstructor

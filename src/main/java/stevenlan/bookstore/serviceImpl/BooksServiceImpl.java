@@ -1,4 +1,4 @@
-package stevenlan.bookstore.books;
+package stevenlan.bookstore.serviceImpl;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -8,15 +8,16 @@ import org.springframework.stereotype.Service;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import stevenlan.bookstore.employees.EmployeesService;
+import stevenlan.bookstore.entity.Books;
+import stevenlan.bookstore.repository.BooksRepository;
 
 @Service
 @RequiredArgsConstructor
-public class BooksService {
+public class BooksServiceImpl {
 
     private final BooksRepository booksRepository;
 
-    private final EmployeesService employeesService;
+    private final EmployeesServiceImpl employeesService;
 
     public String getAllBooks(HttpServletRequest request){
         List<Books> booksList = booksRepository.findAll();
@@ -73,27 +74,28 @@ public class BooksService {
     }
 
     @Transactional
-    public String updateBooks(
-        Long booksId, String title, String author, String description, Integer listPrice, Integer salePrice, HttpServletRequest request){
-            Books books = booksRepository.findById(booksId)
+    public void updateBooks(
+        Long booksId,
+        Books newbooks){
+        Books books = booksRepository.findById(booksId)
             .orElseThrow(() -> new IllegalStateException("this id does not exists"));
 
-            if(title != null && title.length() > 0 && !Objects.equals(books.getTitle(), title)){
-                books.setTitle(title);
+            if(newbooks.getTitle() != null && newbooks.getTitle().length() > 0 && !Objects.equals(books.getTitle(), newbooks.getTitle())){
+                books.setTitle(newbooks.getTitle());
             }
-            if(author != null && author.length() > 0 && !Objects.equals(books.getAuthor(), author)){
-                books.setAuthor(author);
+            if(newbooks.getAuthor() != null && newbooks.getAuthor().length() > 0 && !Objects.equals(books.getAuthor(), newbooks.getAuthor())){
+                books.setAuthor(newbooks.getAuthor());
             }
-            if(description != null && description.length() > 0 && !Objects.equals(books.getDescription(), description)){
-                books.setDescription(description);
+            if(newbooks.getDescription() != null && newbooks.getDescription().length() > 0 && !Objects.equals(books.getDescription(), newbooks.getDescription())){
+                books.setDescription(newbooks.getDescription());
             }
-            if(listPrice != null && listPrice > 0 && !Objects.equals(books.getListPrice(), listPrice)){
-                books.setListPrice(listPrice);
+            if(newbooks.getListPrice() != null && newbooks.getListPrice() > 0 && !Objects.equals(books.getListPrice(), newbooks.getListPrice())){
+                books.setListPrice(newbooks.getListPrice());
             }
-            if(salePrice != null && salePrice > 0 && !Objects.equals(books.getSalePrice(), salePrice)){
-                books.setSalePrice(salePrice);
+            if(newbooks.getSalePrice() != null && newbooks.getSalePrice() > 0 && !Objects.equals(books.getSalePrice(), newbooks.getSalePrice())){
+                books.setSalePrice(newbooks.getSalePrice());
             }
-            return employeesService.tokenGenerate(request);
+            
         }
 
 }

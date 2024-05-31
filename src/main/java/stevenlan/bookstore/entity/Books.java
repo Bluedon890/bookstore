@@ -1,4 +1,4 @@
-package stevenlan.bookstore.books;
+package stevenlan.bookstore.entity;
 
 import jakarta.persistence.*;
 import lombok.Builder;

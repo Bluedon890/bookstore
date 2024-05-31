@@ -4,7 +4,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import stevenlan.bookstore.employees.Employees;
+import stevenlan.bookstore.entity.Employees;
 import stevenlan.bookstore.jwt.repository.TokenRepository;
 
 import org.springframework.security.core.userdetails.UserDetails;

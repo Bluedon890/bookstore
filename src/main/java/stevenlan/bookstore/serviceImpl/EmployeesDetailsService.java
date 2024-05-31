@@ -1,4 +1,4 @@
-package stevenlan.bookstore.employees;
+package stevenlan.bookstore.serviceImpl;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -6,10 +6,11 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
+import stevenlan.bookstore.repository.EmployeesRepository;
 
 @Service
 @RequiredArgsConstructor
-public class EmployeesServiceImpl implements UserDetailsService{
+public class EmployeesDetailsService implements UserDetailsService{
 
     private final EmployeesRepository employeesRepository;
 

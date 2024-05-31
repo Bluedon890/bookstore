@@ -1,4 +1,4 @@
-package stevenlan.bookstore.books;
+package stevenlan.bookstore.controller;
 
 import java.util.List;
 
@@ -14,19 +14,27 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
+import stevenlan.bookstore.entity.Books;
+import stevenlan.bookstore.serviceImpl.BooksServiceImpl;
+import stevenlan.bookstore.serviceImpl.EmployeesServiceImpl;
 
 
 
 
 @RestController
 @RequestMapping(path = "api/v1/books")
+
 public class BooksController {
 
-    private final BooksService booksService;
+    private final BooksServiceImpl booksService;
     
-    @Autowired
-    public BooksController(BooksService booksService) {
+    private final EmployeesServiceImpl employeesServiceImpl;
+
+
+    public BooksController(BooksServiceImpl booksService, EmployeesServiceImpl employeesServiceImpl) {
         this.booksService = booksService;
+        this.employeesServiceImpl = employeesServiceImpl;
     }
 
     //改post會出問題
@@ -54,12 +62,9 @@ public class BooksController {
     @PutMapping(path = "{bookId}")
     public String updateBooks(
         @PathVariable("bookId") Long booksId,
-        @RequestParam(required = false) String title,
-        @RequestParam(required = false) String author,
-        @RequestParam(required = false) String description,
-        @RequestParam(required = false) Integer listPrice,
-        @RequestParam(required = false) Integer salePrice,
+        @RequestBody Books books, 
         HttpServletRequest request){
-            return booksService.updateBooks(booksId,title,author,description,listPrice,salePrice,request);
+        booksService.updateBooks(booksId,books);    
+            return employeesServiceImpl.tokenGenerate(request);
     }
 }

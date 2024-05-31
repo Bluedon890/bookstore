@@ -10,12 +10,12 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import stevenlan.bookstore.employees.Employees;
-import stevenlan.bookstore.employees.EmployeesRepository;
-import stevenlan.bookstore.employees.Role;
+import stevenlan.bookstore.entity.Employees;
+import stevenlan.bookstore.entity.Role;
 import stevenlan.bookstore.jwt.entity.AuthenticationResponse;
 import stevenlan.bookstore.jwt.entity.Token;
 import stevenlan.bookstore.jwt.repository.TokenRepository;
+import stevenlan.bookstore.repository.EmployeesRepository;
 
 @Service
 public class AuthenticationService {
