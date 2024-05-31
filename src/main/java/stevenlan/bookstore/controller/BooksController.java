@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import stevenlan.bookstore.entity.Books;
+import stevenlan.bookstore.service.BooksService;
 import stevenlan.bookstore.serviceImpl.BooksServiceImpl;
 import stevenlan.bookstore.serviceImpl.EmployeesServiceImpl;
 
@@ -27,7 +28,7 @@ import stevenlan.bookstore.serviceImpl.EmployeesServiceImpl;
 
 public class BooksController {
 
-    private final BooksServiceImpl booksService;
+    private final BooksService booksService;
     
     private final EmployeesServiceImpl employeesServiceImpl;
 

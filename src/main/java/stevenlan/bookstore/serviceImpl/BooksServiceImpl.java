@@ -10,15 +10,17 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import stevenlan.bookstore.entity.Books;
 import stevenlan.bookstore.repository.BooksRepository;
+import stevenlan.bookstore.service.BooksService;
 
 @Service
 @RequiredArgsConstructor
-public class BooksServiceImpl {
+public class BooksServiceImpl implements BooksService{
 
     private final BooksRepository booksRepository;
 
     private final EmployeesServiceImpl employeesService;
 
+    @Override
     public String getAllBooks(HttpServletRequest request){
         List<Books> booksList = booksRepository.findAll();
         StringBuilder stringBuilder = new StringBuilder();
@@ -30,6 +32,7 @@ public class BooksServiceImpl {
 
     }
 
+    @Override
     public String getBooksByIds (List<Long> BookIds, HttpServletRequest request){
         StringBuilder stringBuilder = new StringBuilder();
         for(Long id : BookIds){
@@ -48,6 +51,7 @@ public class BooksServiceImpl {
         stringBuilder.append("Sale Price: ").append(book.getSalePrice()).append("\n");
     }
 
+    @Override
     public String addNewBooks(Books books, HttpServletRequest request){
         Optional<Books> booksTitle = booksRepository.findBooksByTitle(books.getTitle());
         if(booksTitle.isPresent()){
@@ -57,6 +61,7 @@ public class BooksServiceImpl {
         return employeesService.tokenGenerate(request);
     }
 
+    @Override
     public String deleteBooks(List<Long> BookIds, HttpServletRequest request){
         for(Long id : BookIds){
             deleteBook(id);
@@ -64,6 +69,7 @@ public class BooksServiceImpl {
         return employeesService.tokenGenerate(request);
     }
 
+    @Override
     public void deleteBook(Long booksId){
         boolean exists = booksRepository.existsById(booksId);
         if(!exists){
@@ -73,6 +79,7 @@ public class BooksServiceImpl {
         
     }
 
+    @Override
     @Transactional
     public void updateBooks(
         Long booksId,
