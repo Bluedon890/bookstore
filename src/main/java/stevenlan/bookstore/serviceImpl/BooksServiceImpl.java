@@ -1,4 +1,5 @@
 package stevenlan.bookstore.serviceImpl;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -8,6 +9,8 @@ import org.springframework.stereotype.Service;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import stevenlan.bookstore.dto.BooksRequest;
+import stevenlan.bookstore.dto.BooksResponse;
 import stevenlan.bookstore.entity.Books;
 import stevenlan.bookstore.repository.BooksRepository;
 import stevenlan.bookstore.service.BooksService;
@@ -21,34 +24,29 @@ public class BooksServiceImpl implements BooksService{
     private final EmployeesServiceImpl employeesService;
 
     @Override
-    public String getAllBooks(HttpServletRequest request){
-        List<Books> booksList = booksRepository.findAll();
-        StringBuilder stringBuilder = new StringBuilder();
-        for (Books book : booksList) {
-            bookStringBuilder(stringBuilder, book);
-        }
-        stringBuilder.append(employeesService.tokenGenerate(request));
-        return stringBuilder.toString();
+    public BooksResponse getAllBooks(BooksRequest booksRequest){
+        List<Books> books = booksRepository.findAll();
+        return new BooksResponse(
+                employeesService.tokenGenerate(booksRequest.getRequest()), 
+                    books, "資料查找完成");
 
     }
 
     @Override
-    public String getBooksByIds (List<Long> BookIds, HttpServletRequest request){
-        StringBuilder stringBuilder = new StringBuilder();
-        for(Long id : BookIds){
-            bookStringBuilder(stringBuilder, booksRepository.findById(id).orElseThrow());
+    public BooksResponse getBooksByIds (BooksRequest booksRequest){
+        try{
+            List<Books> books = new ArrayList<>();
+            for(Long id : booksRequest.getBooksId()){
+                books.add(booksRepository.findById(id).orElseThrow(
+                    ()->new RuntimeException("找不到此資料, 請勿輸入無效的id")));
         }
-        stringBuilder.append(employeesService.tokenGenerate(request));
-        return stringBuilder.toString();
-    }
+            return new BooksResponse(
+                employeesService.tokenGenerate(booksRequest.getRequest()), 
+                    books, "資料查找完成");
+        }catch(RuntimeException e){
+            return new BooksResponse(null, null, e.getMessage());
+        }
 
-    private void bookStringBuilder(StringBuilder stringBuilder, Books book) {
-        stringBuilder.append("Id").append(book.getId()).append(",");
-        stringBuilder.append("Title: ").append(book.getTitle()).append(", ");
-        stringBuilder.append("Author: ").append(book.getAuthor()).append(", ");
-        stringBuilder.append("Description: ").append(book.getDescription()).append(", ");
-        stringBuilder.append("List Price: ").append(book.getListPrice()).append(", ");
-        stringBuilder.append("Sale Price: ").append(book.getSalePrice()).append("\n");
     }
 
     @Override
@@ -104,5 +102,6 @@ public class BooksServiceImpl implements BooksService{
             }
             
         }
+        
 
 }

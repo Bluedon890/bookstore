@@ -3,13 +3,15 @@ package stevenlan.bookstore.service;
 import java.util.List;
 
 import jakarta.servlet.http.HttpServletRequest;
+import stevenlan.bookstore.dto.BooksRequest;
+import stevenlan.bookstore.dto.BooksResponse;
 import stevenlan.bookstore.entity.Books;
 
 public interface BooksService {
 
-    String getAllBooks(HttpServletRequest request);
+    BooksResponse getAllBooks(BooksRequest booksRequest);
 
-    String getBooksByIds (List<Long> BookIds, HttpServletRequest request);
+    BooksResponse getBooksByIds (BooksRequest booksRequest);
 
     String addNewBooks(Books books, HttpServletRequest request);
 

@@ -1,5 +1,7 @@
 package stevenlan.bookstore.entity;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -34,6 +36,9 @@ public class Employees implements UserDetails{
 
     @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "employees")
     private List<Token> tokens;
+
+    
+    
     
     public Employees() {
     }
@@ -48,6 +53,7 @@ public class Employees implements UserDetails{
         this.phoneNumber = phoneNumber;
         this.role = role;
         this.tokens = tokens;
+        
     }
 
     public Employees(String account, String password, String name, String email, String phoneNumber, Role role) {
@@ -57,6 +63,7 @@ public class Employees implements UserDetails{
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.role = role;
+        
     }
 
     public Employees(String account, String password, String name, String email, String phoneNumber) {
@@ -123,6 +130,8 @@ public class Employees implements UserDetails{
         this.role = role;
     }
 
+    
+
     @Override
     public String toString() {
         return "Employees [id=" + id + ", account=" + account + ", password=" + password + ", name=" + name + ", email="
@@ -167,4 +176,5 @@ public class Employees implements UserDetails{
         return true;
     }
 
+    
 }

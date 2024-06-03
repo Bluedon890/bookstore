@@ -18,7 +18,7 @@ public class Token {
     @Column(name = "is_logged_out")
     private boolean loggedout;
 
-    @ManyToOne(cascade = CascadeType.REMOVE)
+    @ManyToOne
     @JoinColumn(name = "employees_id")
     private Employees employees;
 

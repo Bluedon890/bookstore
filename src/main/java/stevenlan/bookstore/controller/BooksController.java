@@ -2,7 +2,7 @@ package stevenlan.bookstore.controller;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -10,11 +10,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.RequiredArgsConstructor;
+import stevenlan.bookstore.dto.BooksRequest;
+import stevenlan.bookstore.dto.BooksResponse;
 import stevenlan.bookstore.entity.Books;
 import stevenlan.bookstore.service.BooksService;
 import stevenlan.bookstore.serviceImpl.BooksServiceImpl;
@@ -40,13 +40,19 @@ public class BooksController {
 
     //改post會出問題
     @GetMapping
-    public String getAllBooks(HttpServletRequest request){
-        return booksService.getAllBooks(request);
+    public ResponseEntity<BooksResponse> getAllBooks(HttpServletRequest request){
+        BooksRequest booksRequest = new BooksRequest(null, request, null);
+        return ResponseEntity.ok(booksService.getAllBooks(booksRequest));
     }
 
     @PostMapping(path = "{bookIds}")
-    public String getBooksByIds(@PathVariable("bookIds") List<Long> booksId, HttpServletRequest request){
-        return booksService.getBooksByIds(booksId, request);
+    public ResponseEntity<BooksResponse> getBooksByIds(@PathVariable("bookIds") List<Long> booksId, HttpServletRequest request){
+        //沒有作用
+        if(booksId.isEmpty()||booksId == null){
+            return ResponseEntity.badRequest().body(new BooksResponse(null, null, ""));
+        }
+        BooksRequest booksRequest = new BooksRequest(null, request, booksId);
+        return ResponseEntity.ok(booksService.getBooksByIds(booksRequest));
     }
 
     @PostMapping
