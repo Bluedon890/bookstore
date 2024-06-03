@@ -1,5 +1,6 @@
 package stevenlan.bookstore.serviceImpl;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -34,48 +35,66 @@ public class BooksServiceImpl implements BooksService{
 
     @Override
     public BooksResponse getBooksByIds (BooksRequest booksRequest){
-        try{
+        // try{
             List<Books> books = new ArrayList<>();
             for(Long id : booksRequest.getBooksId()){
-                books.add(booksRepository.findById(id).orElseThrow(
-                    ()->new RuntimeException("找不到此資料, 請勿輸入無效的id")));
-        }
+                books.add(booksRepository.findById(id).orElse(null
+                    // ()->new RuntimeException("找不到此資料, 請勿輸入無效的id")
+                ));
+            }
             return new BooksResponse(
                 employeesService.tokenGenerate(booksRequest.getRequest()), 
                     books, "資料查找完成");
-        }catch(RuntimeException e){
-            return new BooksResponse(null, null, e.getMessage());
-        }
-
+        // }
+        // catch(RuntimeException e){
+        //     return new BooksResponse(null, null, e.getMessage());
+        // }
     }
 
     @Override
-    public String addNewBooks(Books books, HttpServletRequest request){
-        Optional<Books> booksTitle = booksRepository.findBooksByTitle(books.getTitle());
-        if(booksTitle.isPresent()){
-            throw new IllegalStateException("this book is exist");
+    public BooksResponse addNewBooks(BooksRequest booksRequest){
+        if(booksRepository.findBooksByTitle(booksRequest.getBooks().getTitle()).isPresent()){
+            return new BooksResponse(null, Arrays.asList(booksRequest.getBooks()), "此書本已存在");
         }
-        booksRepository.save(books);
-        return employeesService.tokenGenerate(request);
-    }
-
-    @Override
-    public String deleteBooks(List<Long> BookIds, HttpServletRequest request){
-        for(Long id : BookIds){
-            deleteBook(id);
-        }   
-        return employeesService.tokenGenerate(request);
-    }
-
-    @Override
-    public void deleteBook(Long booksId){
-        boolean exists = booksRepository.existsById(booksId);
-        if(!exists){
-            throw new IllegalStateException("this id does not exists");
-        }
-        booksRepository.deleteById(booksId);
         
+        booksRepository.save(booksRequest.getBooks());
+        return new BooksResponse(
+            employeesService.tokenGenerate(booksRequest.getRequest()), 
+            Arrays.asList(booksRequest.getBooks()), 
+            "新增完成");
     }
+
+    @Override
+    public BooksResponse deleteBooks(BooksRequest booksRequest){
+        String nonExistId = "";
+        for(Long id : booksRequest.getBooksId()){
+            if(booksRepository.existsById(id)){
+                booksRepository.deleteById(id);
+            }else{
+                nonExistId += id;
+                nonExistId +=", ";
+            }
+        }
+        if(!nonExistId.isBlank()){
+            return new BooksResponse(
+            employeesService.tokenGenerate(booksRequest.getRequest()), 
+            null, "id為 " + nonExistId + "的資料不存在, 其餘資料刪除成功");
+        }else{   
+            return new BooksResponse(
+                employeesService.tokenGenerate(booksRequest.getRequest()), 
+            null, "刪除成功");
+        }
+    }
+
+    // @Override
+    // public void deleteBook(Long booksId){
+    //     boolean exists = booksRepository.existsById(booksId);
+    //     if(!exists){
+    //         throw new IllegalStateException("this id does not exists");
+    //     }
+    //     booksRepository.deleteById(booksId);
+        
+    // }
 
     @Override
     @Transactional

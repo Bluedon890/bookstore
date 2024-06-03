@@ -45,8 +45,8 @@ public class BooksController {
         return ResponseEntity.ok(booksService.getAllBooks(booksRequest));
     }
 
-    @PostMapping(path = "{bookIds}")
-    public ResponseEntity<BooksResponse> getBooksByIds(@PathVariable("bookIds") List<Long> booksId, HttpServletRequest request){
+    @PostMapping(value = {"/get/{bookIds}", "/get/"})
+    public ResponseEntity<BooksResponse> getBooksByIds(@PathVariable(value = "bookIds", required = false) List<Long> booksId, HttpServletRequest request){
         //沒有作用
         if(booksId.isEmpty()||booksId == null){
             return ResponseEntity.badRequest().body(new BooksResponse(null, null, ""));
@@ -56,14 +56,19 @@ public class BooksController {
     }
 
     @PostMapping
-    public String addNewBooks(@RequestBody Books books, HttpServletRequest request){
-        return booksService.addNewBooks(books,request);
+    public ResponseEntity<BooksResponse> addNewBooks(@RequestBody Books books, HttpServletRequest request){
+        BooksRequest booksRequest = new BooksRequest(books, request,null);
+        
+        return ResponseEntity.ok(booksService.addNewBooks(booksRequest));
     }
 
     @DeleteMapping(path = "{booksIds}")
-    public String deleteBooks(
+    public ResponseEntity<BooksResponse> deleteBooks(
         @PathVariable("booksIds") List<Long> bookIds, HttpServletRequest request){
-            return booksService.deleteBooks(bookIds,request);
+            
+        BooksRequest booksRequest = new BooksRequest(null, request,bookIds);
+
+        return ResponseEntity.ok(booksService.deleteBooks(booksRequest));
     }
 
     @PutMapping(path = "{bookId}")

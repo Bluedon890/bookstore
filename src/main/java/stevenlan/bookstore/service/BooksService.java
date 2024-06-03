@@ -13,11 +13,9 @@ public interface BooksService {
 
     BooksResponse getBooksByIds (BooksRequest booksRequest);
 
-    String addNewBooks(Books books, HttpServletRequest request);
+    BooksResponse addNewBooks(BooksRequest booksRequest);
 
-    String deleteBooks(List<Long> BookIds, HttpServletRequest request);
-
-    void deleteBook(Long booksId);
+    BooksResponse deleteBooks(BooksRequest booksRequest);
 
     void updateBooks (Long booksId, Books newbooks);
 }

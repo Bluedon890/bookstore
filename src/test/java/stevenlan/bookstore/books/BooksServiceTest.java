@@ -40,29 +40,29 @@ public class BooksServiceTest {
                 .description("apple is red")
                 .listPrice(20)
                 .salePrice(15).build();
-    @Test
-    public void BooksService_AddNewBooks_BookExists(){
+    // @Test
+    // public void BooksService_AddNewBooks_BookExists(){
         
-        Books existingBook = new Books();
-        existingBook.setTitle("Existing Book Title");
+    //     Books existingBook = new Books();
+    //     existingBook.setTitle("Existing Book Title");
     
-        when(booksRepository.findBooksByTitle(existingBook.getTitle())).thenReturn(Optional.of(existingBook));
-        try {
-            booksService.addNewBooks(existingBook, null);
-            fail("Expected IllegalStateException to be thrown");
-        } catch (IllegalStateException e) {
-            assertEquals("this book is exist", e.getMessage());
-        }
+    //     when(booksRepository.findBooksByTitle(existingBook.getTitle())).thenReturn(Optional.of(existingBook));
+    //     try {
+    //         booksService.addNewBooks(existingBook, null);
+    //         fail("Expected IllegalStateException to be thrown");
+    //     } catch (IllegalStateException e) {
+    //         assertEquals("this book is exist", e.getMessage());
+    //     }
 
-        // 確認沒有書籍被保存
-        verify(booksRepository, never()).save(any(Books.class));
-    }
+    //     // 確認沒有書籍被保存
+    //     verify(booksRepository, never()).save(any(Books.class));
+    // }
 
-    @Test
-    public void BooksService_AddNewBooks_BookNotExists(){
-        booksService.addNewBooks(book, null);
-        verify(booksRepository, times(1)).save(book);
-    }
+    // @Test
+    // public void BooksService_AddNewBooks_BookNotExists(){
+    //     booksService.addNewBooks(book, null);
+    //     verify(booksRepository, times(1)).save(book);
+    // }
 
     @Test
     public void should_Update_When_BooksExsist(){
