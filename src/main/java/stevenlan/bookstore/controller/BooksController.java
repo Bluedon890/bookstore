@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -38,45 +39,44 @@ public class BooksController {
         this.employeesServiceImpl = employeesServiceImpl;
     }
 
-    //改post會出問題
-    @GetMapping
-    public ResponseEntity<BooksResponse> getAllBooks(HttpServletRequest request){
-        BooksRequest booksRequest = new BooksRequest(null, request, null);
-        return ResponseEntity.ok(booksService.getAllBooks(booksRequest));
-    }
+    //不輸入就是GetAll
+    @PostMapping(value = "/get")
+    public ResponseEntity<BooksResponse> getBooksByIds(
+        @RequestParam(value = "bookIds", required = false) List<Long> booksId, 
+        HttpServletRequest request){
 
-    @PostMapping(value = {"/get/{bookIds}", "/get/"})
-    public ResponseEntity<BooksResponse> getBooksByIds(@PathVariable(value = "bookIds", required = false) List<Long> booksId, HttpServletRequest request){
-        //沒有作用
+        BooksRequest booksRequest = new BooksRequest(
+            null, request, booksId);
         if(booksId.isEmpty()||booksId == null){
-            return ResponseEntity.badRequest().body(new BooksResponse(null, null, ""));
+            return ResponseEntity.ok(booksService.getAllBooks(booksRequest));
         }
-        BooksRequest booksRequest = new BooksRequest(null, request, booksId);
         return ResponseEntity.ok(booksService.getBooksByIds(booksRequest));
     }
 
     @PostMapping
-    public ResponseEntity<BooksResponse> addNewBooks(@RequestBody Books books, HttpServletRequest request){
-        BooksRequest booksRequest = new BooksRequest(books, request,null);
+    public ResponseEntity<BooksResponse> addNewBooks(
+        @RequestBody Books books, HttpServletRequest request){
+        BooksRequest booksRequest = new BooksRequest(
+            books, request,null);
         
         return ResponseEntity.ok(booksService.addNewBooks(booksRequest));
     }
 
-    @DeleteMapping(path = "{booksIds}")
+    @DeleteMapping(value = "/delete")
     public ResponseEntity<BooksResponse> deleteBooks(
-        @PathVariable("booksIds") List<Long> bookIds, HttpServletRequest request){
-            
-        BooksRequest booksRequest = new BooksRequest(null, request,bookIds);
+        @RequestParam(value = "bookIds", required = false) List<Long> bookIds, 
+        HttpServletRequest request){
+        BooksRequest booksRequest = new BooksRequest(null, request, bookIds);
 
         return ResponseEntity.ok(booksService.deleteBooks(booksRequest));
     }
 
-    @PutMapping(path = "{bookId}")
-    public String updateBooks(
-        @PathVariable("bookId") Long booksId,
+    @PutMapping(value = "/update")
+    public ResponseEntity<BooksResponse> updateBooks(
+        @RequestParam(value = "bookId", required = false) List<Long> bookId,
         @RequestBody Books books, 
         HttpServletRequest request){
-        booksService.updateBooks(booksId,books);    
-            return employeesServiceImpl.tokenGenerate(request);
+            BooksRequest booksRequest = new BooksRequest(books, request, bookId);
+            return ResponseEntity.ok(booksService.updateBooks(booksRequest));
     }
 }

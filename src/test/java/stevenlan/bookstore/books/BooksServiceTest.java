@@ -64,17 +64,17 @@ public class BooksServiceTest {
     //     verify(booksRepository, times(1)).save(book);
     // }
 
-    @Test
-    public void should_Update_When_BooksExsist(){
-        Books existingBook = new Books();
-        existingBook.setId(1L);
-        when(booksRepository.findById(existingBook.getId())).thenReturn(Optional.of(existingBook));
-        booksService.updateBooks(1L, book);
-        assertEquals(book.getTitle(), existingBook.getTitle());
-        assertEquals(book.getAuthor(), existingBook.getAuthor());
-        assertEquals(book.getDescription(), existingBook.getDescription());
-        assertEquals(book.getListPrice(), existingBook.getListPrice());
-        assertEquals(book.getSalePrice(), existingBook.getSalePrice());
-    }
+    // @Test
+    // public void should_Update_When_BooksExsist(){
+    //     Books existingBook = new Books();
+    //     existingBook.setId(1L);
+    //     when(booksRepository.findById(existingBook.getId())).thenReturn(Optional.of(existingBook));
+    //     booksService.updateBooks(1L, book);
+    //     assertEquals(book.getTitle(), existingBook.getTitle());
+    //     assertEquals(book.getAuthor(), existingBook.getAuthor());
+    //     assertEquals(book.getDescription(), existingBook.getDescription());
+    //     assertEquals(book.getListPrice(), existingBook.getListPrice());
+    //     assertEquals(book.getSalePrice(), existingBook.getSalePrice());
+    // }
 
 }

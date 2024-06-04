@@ -3,11 +3,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
-
 import org.springframework.stereotype.Service;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import stevenlan.bookstore.dto.BooksRequest;
@@ -29,34 +26,40 @@ public class BooksServiceImpl implements BooksService{
         List<Books> books = booksRepository.findAll();
         return new BooksResponse(
                 employeesService.tokenGenerate(booksRequest.getRequest()), 
-                    books, "資料查找完成");
+                    books, "資料查詢完畢");
 
     }
 
+    
     @Override
     public BooksResponse getBooksByIds (BooksRequest booksRequest){
-        // try{
-            List<Books> books = new ArrayList<>();
-            for(Long id : booksRequest.getBooksId()){
-                books.add(booksRepository.findById(id).orElse(null
-                    // ()->new RuntimeException("找不到此資料, 請勿輸入無效的id")
-                ));
+        List<Books> books = new ArrayList<>();
+        String nonExistId = "";
+        for(Long id : booksRequest.getBooksId()){
+            if(booksRepository.findById(id).isPresent()){
+                books.add(booksRepository.findById(id).orElseThrow());
+            }else{
+                nonExistId += id;
+                nonExistId +=", ";
             }
-            return new BooksResponse(
+        }
+            if(!nonExistId.isBlank()){
+                return new BooksResponse(
                 employeesService.tokenGenerate(booksRequest.getRequest()), 
-                    books, "資料查找完成");
-        // }
-        // catch(RuntimeException e){
-        //     return new BooksResponse(null, null, e.getMessage());
-        // }
+                books, "查詢完畢, id為 " + nonExistId + "的資料不存在");
+            }else{   
+                return new BooksResponse(
+                    employeesService.tokenGenerate(booksRequest.getRequest()), 
+                books, "查詢完畢");
+            }   
     }
 
     @Override
     public BooksResponse addNewBooks(BooksRequest booksRequest){
         if(booksRepository.findBooksByTitle(booksRequest.getBooks().getTitle()).isPresent()){
-            return new BooksResponse(null, Arrays.asList(booksRequest.getBooks()), "此書本已存在");
+            return new BooksResponse(null, 
+                Arrays.asList(booksRequest.getBooks()), "此書本已存在");
         }
-        
         booksRepository.save(booksRequest.getBooks());
         return new BooksResponse(
             employeesService.tokenGenerate(booksRequest.getRequest()), 
@@ -66,6 +69,9 @@ public class BooksServiceImpl implements BooksService{
 
     @Override
     public BooksResponse deleteBooks(BooksRequest booksRequest){
+        if(booksRequest.getBooksId().isEmpty()){
+            return new BooksResponse(null, null, "請輸入欲刪除的書本id");
+        }
         String nonExistId = "";
         for(Long id : booksRequest.getBooksId()){
             if(booksRepository.existsById(id)){
@@ -78,49 +84,45 @@ public class BooksServiceImpl implements BooksService{
         if(!nonExistId.isBlank()){
             return new BooksResponse(
             employeesService.tokenGenerate(booksRequest.getRequest()), 
-            null, "id為 " + nonExistId + "的資料不存在, 其餘資料刪除成功");
+            null, "刪除完畢, id為 " + nonExistId + "的資料不存在");
         }else{   
             return new BooksResponse(
                 employeesService.tokenGenerate(booksRequest.getRequest()), 
-            null, "刪除成功");
+            null, "刪除完畢");
         }
     }
 
-    // @Override
-    // public void deleteBook(Long booksId){
-    //     boolean exists = booksRepository.existsById(booksId);
-    //     if(!exists){
-    //         throw new IllegalStateException("this id does not exists");
-    //     }
-    //     booksRepository.deleteById(booksId);
-        
-    // }
-
     @Override
     @Transactional
-    public void updateBooks(
-        Long booksId,
-        Books newbooks){
-        Books books = booksRepository.findById(booksId)
-            .orElseThrow(() -> new IllegalStateException("this id does not exists"));
-
-            if(newbooks.getTitle() != null && newbooks.getTitle().length() > 0 && !Objects.equals(books.getTitle(), newbooks.getTitle())){
-                books.setTitle(newbooks.getTitle());
-            }
-            if(newbooks.getAuthor() != null && newbooks.getAuthor().length() > 0 && !Objects.equals(books.getAuthor(), newbooks.getAuthor())){
-                books.setAuthor(newbooks.getAuthor());
-            }
-            if(newbooks.getDescription() != null && newbooks.getDescription().length() > 0 && !Objects.equals(books.getDescription(), newbooks.getDescription())){
-                books.setDescription(newbooks.getDescription());
-            }
-            if(newbooks.getListPrice() != null && newbooks.getListPrice() > 0 && !Objects.equals(books.getListPrice(), newbooks.getListPrice())){
-                books.setListPrice(newbooks.getListPrice());
-            }
-            if(newbooks.getSalePrice() != null && newbooks.getSalePrice() > 0 && !Objects.equals(books.getSalePrice(), newbooks.getSalePrice())){
-                books.setSalePrice(newbooks.getSalePrice());
-            }
-            
+    public BooksResponse updateBooks(BooksRequest booksRequest){
+        if(booksRequest.getBooksId().isEmpty()){
+            return new BooksResponse(null, null, "請輸入欲更新的書本id");
         }
-        
-
+        Books book = booksRepository.findById(booksRequest.getBooksId().get(0)).orElse(null);
+        if(book == null){
+            return new BooksResponse(
+                employeesService.tokenGenerate(booksRequest.getRequest()), 
+            null, "更新失敗, 此id之資料不存在");
+        }else{
+            Books newBook = booksRequest.getBooks();
+            if(newBook.getTitle() != null && newBook.getTitle().length() > 0 && !Objects.equals(book.getTitle(), newBook.getTitle())){
+                book.setTitle(newBook.getTitle());
+            }
+            if(newBook.getAuthor() != null && newBook.getAuthor().length() > 0 && !Objects.equals(book.getAuthor(), newBook.getAuthor())){
+                book.setAuthor(newBook.getAuthor());
+            }
+            if(newBook.getDescription() != null && newBook.getDescription().length() > 0 && !Objects.equals(book.getDescription(), newBook.getDescription())){
+                book.setDescription(newBook.getDescription());
+            }
+            if(newBook.getListPrice() != null && newBook.getListPrice() > 0 && !Objects.equals(book.getListPrice(), newBook.getListPrice())){
+                book.setListPrice(newBook.getListPrice());
+            }
+            if(newBook.getSalePrice() != null && newBook.getSalePrice() > 0 && !Objects.equals(book.getSalePrice(), newBook.getSalePrice())){
+                book.setSalePrice(newBook.getSalePrice());
+            }
+            return new BooksResponse(
+                employeesService.tokenGenerate(booksRequest.getRequest()), 
+            null, "更新完畢");
+        }
+    }
 }

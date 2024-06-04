@@ -17,5 +17,5 @@ public interface BooksService {
 
     BooksResponse deleteBooks(BooksRequest booksRequest);
 
-    void updateBooks (Long booksId, Books newbooks);
+    BooksResponse updateBooks (BooksRequest booksRequest);
 }
