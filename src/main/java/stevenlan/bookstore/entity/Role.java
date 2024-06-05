@@ -4,5 +4,5 @@ public enum Role {
     USER,
     ADMIN,
     PEOPLE_MANAGER,
-    BOOK_MANAGER,
+    BOOK_MANAGER
 }

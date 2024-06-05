@@ -7,10 +7,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.servlet.http.HttpServletRequest;
 import stevenlan.bookstore.entity.Books;
 
-public class BooksRequest {
+public class BooksRequest{
 
     private Books books;
-    
+
     private HttpServletRequest request;
 
     private List<Long> booksId;

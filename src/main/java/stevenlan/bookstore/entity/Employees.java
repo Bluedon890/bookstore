@@ -31,19 +31,17 @@ public class Employees implements UserDetails{
 
     private String phoneNumber;
     
+    @ElementCollection(fetch = FetchType.EAGER)
     @Enumerated(value = EnumType.STRING)
-    private Role role;
+    private List<Role> roles;
 
     @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "employees")
     private List<Token> tokens;
 
-    
-    
-    
     public Employees() {
     }
 
-    public Employees(Long id, String account, String password, String name, String email, String phoneNumber, Role role,
+    public Employees(Long id, String account, String password, String name, String email, String phoneNumber, List<Role> roles,
             List<Token> tokens) {
         this.id = id;
         this.account = account;
@@ -51,18 +49,18 @@ public class Employees implements UserDetails{
         this.name = name;
         this.email = email;
         this.phoneNumber = phoneNumber;
-        this.role = role;
+        this.roles = roles;
         this.tokens = tokens;
         
     }
 
-    public Employees(String account, String password, String name, String email, String phoneNumber, Role role) {
+    public Employees(String account, String password, String name, String email, String phoneNumber, List<Role> roles) {
         this.account = account;
         this.password = password;
         this.name = name;
         this.email = email;
         this.phoneNumber = phoneNumber;
-        this.role = role;
+        this.roles = roles;
         
     }
 
@@ -122,12 +120,12 @@ public class Employees implements UserDetails{
         this.phoneNumber = phoneNumber;
     }
 
-    public Role getRole() {
-        return role;
+    public List<Role> getRole() {
+        return roles;
     }
 
-    public void setRole(Role role) {
-        this.role = role;
+    public void setRole(List<Role> roles) {
+        this.roles = roles;
     }
 
     
@@ -135,7 +133,7 @@ public class Employees implements UserDetails{
     @Override
     public String toString() {
         return "Employees [id=" + id + ", account=" + account + ", password=" + password + ", name=" + name + ", email="
-                + email + ", phoneNumber=" + phoneNumber + ", role=" + role + "]";
+                + email + ", phoneNumber=" + phoneNumber + ", role=" + roles + "]";
     }
 
     public List<Token> getTokens() {
@@ -148,7 +146,11 @@ public class Employees implements UserDetails{
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.name()));
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        for (Role role : roles) {
+            authorities.add(new SimpleGrantedAuthority(role.name()));
+        }
+        return authorities;
     }
 
     @Override

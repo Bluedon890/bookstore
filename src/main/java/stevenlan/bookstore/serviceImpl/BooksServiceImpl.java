@@ -3,6 +3,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
@@ -55,6 +57,7 @@ public class BooksServiceImpl implements BooksService{
     }
 
     @Override
+    @PreAuthorize("hasAuthority('BOOK_MANAGER')")
     public BooksResponse addNewBooks(BooksRequest booksRequest){
         if(booksRepository.findBooksByTitle(booksRequest.getBooks().getTitle()).isPresent()){
             return new BooksResponse(null, 
@@ -68,6 +71,7 @@ public class BooksServiceImpl implements BooksService{
     }
 
     @Override
+    @PreAuthorize("hasAuthority('BOOK_MANAGER')")
     public BooksResponse deleteBooks(BooksRequest booksRequest){
         if(booksRequest.getBooksId().isEmpty()){
             return new BooksResponse(null, null, "請輸入欲刪除的書本id");
@@ -94,6 +98,7 @@ public class BooksServiceImpl implements BooksService{
 
     @Override
     @Transactional
+    @PreAuthorize("hasAuthority('BOOK_MANAGER')")
     public BooksResponse updateBooks(BooksRequest booksRequest){
         if(booksRequest.getBooksId().isEmpty()){
             return new BooksResponse(null, null, "請輸入欲更新的書本id");

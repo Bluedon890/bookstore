@@ -1,11 +1,7 @@
 package stevenlan.bookstore.service;
 
-import java.util.List;
-
-import jakarta.servlet.http.HttpServletRequest;
 import stevenlan.bookstore.dto.BooksRequest;
 import stevenlan.bookstore.dto.BooksResponse;
-import stevenlan.bookstore.entity.Books;
 
 public interface BooksService {
 

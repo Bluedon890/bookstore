@@ -2,6 +2,7 @@ package stevenlan.bookstore.jwt.service;
 
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.security.authentication.AuthenticationManager;
@@ -10,6 +11,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import io.jsonwebtoken.lang.Arrays;
 import stevenlan.bookstore.entity.Employees;
 import stevenlan.bookstore.entity.Role;
 import stevenlan.bookstore.jwt.entity.AuthenticationResponse;
@@ -42,7 +44,7 @@ public class AuthenticationService {
     }
 
     //管理層註冊
-    public AuthenticationResponse adminRegister(Employees request) {
+    public AuthenticationResponse adminRegister(Employees request, List<String> roles) {
 
         if(empRepository.findEmployeesByAccount(request.getUsername()).isPresent()){
             return new AuthenticationResponse(null, "此帳號已存在");
@@ -53,9 +55,18 @@ public class AuthenticationService {
         employees.setEmail(request.getEmail());
         employees.setPhoneNumber(request.getPhoneNumber());
         employees.setPassword(passwordEncoder.encode(request.getPassword()));
-
-
-        employees.setRole(request.getRole());
+        List<Role> addRole = new ArrayList<>();
+        for(String role : roles){
+            for(Role r : Role.values()){
+                if(r.name().equals(role)){
+                    addRole.add(r);
+                }
+            }
+        }
+        if(!addRole.isEmpty()){
+            employees.setRole(addRole);
+        }
+        // employees.setRole(List.of(request.getRole().get(0)));
 
         employees = empRepository.save(employees);
 
@@ -82,7 +93,7 @@ public class AuthenticationService {
         employees.setPassword(passwordEncoder.encode(request.getPassword()));
 
 
-        employees.setRole(Role.USER);
+        employees.setRole(List.of(Role.USER));
 
         employees = empRepository.save(employees);
 

@@ -1,8 +1,11 @@
 package stevenlan.bookstore.jwt.controller;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
@@ -18,9 +21,10 @@ public class AuthenticationController {
 
     @PostMapping("/v1/adminregister")
     public ResponseEntity<AuthenticationResponse> adminregister(
-            @RequestBody Employees request){
+            @RequestBody Employees request,
+            @RequestParam List<String> roles){
         
-        return ResponseEntity.ok(authService.adminRegister(request));
+        return ResponseEntity.ok(authService.adminRegister(request,roles));
     }
     @PostMapping("/v1/employeesregister")
     public ResponseEntity<AuthenticationResponse> employeesregister(
