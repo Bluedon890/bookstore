@@ -10,13 +10,13 @@ import stevenlan.bookstore.repository.EmployeesRepository;
 
 @Service
 @RequiredArgsConstructor
-public class EmployeesDetailsService implements UserDetailsService{
+public class EmployeesDetailsService implements UserDetailsService {
 
     private final EmployeesRepository employeesRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return employeesRepository.findEmployeesByAccount(username)
-            .orElseThrow(()-> new UsernameNotFoundException("Account not found"));
+                .orElseThrow(() -> new UsernameNotFoundException("Account not found"));
     }
 }

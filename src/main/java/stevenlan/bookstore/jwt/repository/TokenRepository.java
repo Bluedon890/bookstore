@@ -8,10 +8,8 @@ import org.springframework.data.jpa.repository.Query;
 
 import stevenlan.bookstore.jwt.entity.Token;
 
+public interface TokenRepository extends JpaRepository<Token, Integer> {
 
-
-public interface TokenRepository extends JpaRepository<Token, Integer>{
-    
     @Query("""
             select t from Token t inner join Employees e on t.employees.id = e.id
             where t.employees.id = :employeeId and loggedout = false

@@ -9,9 +9,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import stevenlan.bookstore.jwt.entity.Token;
 import stevenlan.bookstore.jwt.repository.TokenRepository;
 
-
 @Component
-public class CustomLogoutHandler implements LogoutHandler{
+public class CustomLogoutHandler implements LogoutHandler {
 
     private final TokenRepository tokenRepository;
 
@@ -20,23 +19,22 @@ public class CustomLogoutHandler implements LogoutHandler{
     }
 
     @Override
-    public void logout(HttpServletRequest request, 
-                        HttpServletResponse response, 
-                        Authentication authentication) {
+    public void logout(HttpServletRequest request,
+            HttpServletResponse response,
+            Authentication authentication) {
 
         String authHeader = request.getHeader("Authorization");
 
-        if(authHeader == null || !authHeader.startsWith("Bearer ")) {
-            
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+
             return;
         }
 
         String token = authHeader.substring(7);
-        
+
         Token storedToken = tokenRepository.findByToken(token).orElse(null);
 
-        
-        if(token != null){
+        if (token != null) {
             storedToken.setLoggedout(true);
             tokenRepository.save(storedToken);
         }

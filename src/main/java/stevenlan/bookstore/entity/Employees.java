@@ -1,6 +1,5 @@
 package stevenlan.bookstore.entity;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -14,7 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
 @Table(name = "員工")
-public class Employees implements UserDetails{
+public class Employees implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,7 +29,7 @@ public class Employees implements UserDetails{
     private String email;
 
     private String phoneNumber;
-    
+
     @ElementCollection(fetch = FetchType.EAGER)
     @Enumerated(value = EnumType.STRING)
     private List<Role> roles;
@@ -41,7 +40,8 @@ public class Employees implements UserDetails{
     public Employees() {
     }
 
-    public Employees(Long id, String account, String password, String name, String email, String phoneNumber, List<Role> roles,
+    public Employees(Long id, String account, String password, String name, String email, String phoneNumber,
+            List<Role> roles,
             List<Token> tokens) {
         this.id = id;
         this.account = account;
@@ -51,7 +51,7 @@ public class Employees implements UserDetails{
         this.phoneNumber = phoneNumber;
         this.roles = roles;
         this.tokens = tokens;
-        
+
     }
 
     public Employees(String account, String password, String name, String email, String phoneNumber, List<Role> roles) {
@@ -61,7 +61,7 @@ public class Employees implements UserDetails{
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.roles = roles;
-        
+
     }
 
     public Employees(String account, String password, String name, String email, String phoneNumber) {
@@ -128,8 +128,6 @@ public class Employees implements UserDetails{
         this.roles = roles;
     }
 
-    
-
     @Override
     public String toString() {
         return "Employees [id=" + id + ", account=" + account + ", password=" + password + ", name=" + name + ", email="
@@ -178,5 +176,4 @@ public class Employees implements UserDetails{
         return true;
     }
 
-    
 }

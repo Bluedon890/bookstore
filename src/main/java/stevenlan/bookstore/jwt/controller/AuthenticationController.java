@@ -22,23 +22,22 @@ public class AuthenticationController {
     @PostMapping("/v1/adminregister")
     public ResponseEntity<AuthenticationResponse> adminregister(
             @RequestBody Employees request,
-            @RequestParam List<String> roles){
-        
-        return ResponseEntity.ok(authService.adminRegister(request,roles));
+            @RequestParam List<String> roles) {
+
+        return ResponseEntity.ok(authService.adminRegister(request, roles));
     }
+
     @PostMapping("/v1/employeesregister")
     public ResponseEntity<AuthenticationResponse> employeesregister(
-            @RequestBody Employees request){
-        
+            @RequestBody Employees request) {
+
         return ResponseEntity.ok(authService.employeesRegister(request));
     }
 
     @PostMapping("/v1/login")
-    public ResponseEntity<AuthenticationResponse>login(
-            @RequestBody Employees request
-    ){
+    public ResponseEntity<AuthenticationResponse> login(
+            @RequestBody Employees request) {
         return ResponseEntity.ok(authService.authenticate(request));
     }
 
-    
 }

@@ -25,7 +25,6 @@ public class JwtService {
         this.tokenRepository = tokenRepository;
     }
 
-
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
@@ -34,7 +33,7 @@ public class JwtService {
         String username = extractUsername(token);
 
         boolean isTokenLoggedout = tokenRepository.findByToken(token)
-                                    .map(t->!t.isLoggedout()).orElse(false);
+                .map(t -> !t.isLoggedout()).orElse(false);
 
         return (username.equals(user.getUsername())) && !isTokenExpired(token) && isTokenLoggedout;
     }
@@ -61,14 +60,13 @@ public class JwtService {
                 .getPayload();
     }
 
-
     public String generateToken(Employees employees) {
         String token = Jwts
                 .builder()
                 .subject(employees.getUsername())
                 .issuedAt(new Date(System.currentTimeMillis()))
-                //10分鐘
-                .expiration(new Date(System.currentTimeMillis() + 10*60*1000 ))
+                // 10分鐘
+                .expiration(new Date(System.currentTimeMillis() + 10 * 60 * 1000))
                 .signWith(getSigninKey())
                 .compact();
 

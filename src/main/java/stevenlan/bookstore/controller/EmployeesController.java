@@ -15,41 +15,40 @@ import jakarta.servlet.http.HttpServletRequest;
 import stevenlan.bookstore.serviceImpl.EmployeesServiceImpl;
 
 @RestController
-@RequestMapping(path="api/v1/employees")
+@RequestMapping(path = "api/v1/employees")
 public class EmployeesController {
 
     private final EmployeesServiceImpl employeesService;
-    
+
     public EmployeesController(EmployeesServiceImpl employeesService) {
         this.employeesService = employeesService;
     }
 
-    
     @PostMapping(path = "{employeesId}")
-	public ArrayList<String> getEmployees(
-        @PathVariable("employeesId") List<Long> ids, HttpServletRequest request){
-		return employeesService.getEmployeesByIds(ids, request);
-		
-	}
+    public ArrayList<String> getEmployees(
+            @PathVariable("employeesId") List<Long> ids, HttpServletRequest request) {
+        return employeesService.getEmployeesByIds(ids, request);
+
+    }
+
     @DeleteMapping()
-    public void deleteEmployees(HttpServletRequest request){
+    public void deleteEmployees(HttpServletRequest request) {
         employeesService.deleteEmployeeById(
-            employeesService.findEmployeeByRequest(request).getId());
+                employeesService.findEmployeeByRequest(request).getId());
     }
 
     @PutMapping()
     public void updateEmployees(
-        @PathVariable("employeesId") Long employeesId,
-        @RequestParam(required = false) String name,
-        @RequestParam(required = false) String account,
-        @RequestParam(required = false) String password,
-        @RequestParam(required = false) String email,
-        @RequestParam(required = false) String phoneNumber,
-        HttpServletRequest request){
-            Long id = employeesService.findEmployeeByRequest(request).getId();
-            employeesService.updateEmployee(id,name,account,password,email,phoneNumber,request);
+            @PathVariable("employeesId") Long employeesId,
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String account,
+            @RequestParam(required = false) String password,
+            @RequestParam(required = false) String email,
+            @RequestParam(required = false) String phoneNumber,
+            HttpServletRequest request) {
+        Long id = employeesService.findEmployeeByRequest(request).getId();
+        employeesService.updateEmployee(id, name, account, password, email, phoneNumber, request);
 
     }
 
 }
-

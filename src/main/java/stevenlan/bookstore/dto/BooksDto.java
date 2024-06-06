@@ -1,17 +1,7 @@
-package stevenlan.bookstore.entity;
+package stevenlan.bookstore.dto;
 
-import jakarta.persistence.*;
-import lombok.Builder;
+public class BooksDto {
 
-@Builder
-@Entity
-@Table(name = "Books")
-public class Books {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-
-    // @Column(name = "書本id")
     private Long id;
     private String title;
     private String author;
@@ -19,15 +9,7 @@ public class Books {
     private Integer listPrice;
     private Integer salePrice;
 
-    public Books(String title, String author, String description, Integer listPrice, Integer salePrice) {
-        this.title = title;
-        this.author = author;
-        this.description = description;
-        this.listPrice = listPrice;
-        this.salePrice = salePrice;
-    }
-
-    public Books(Long id, String title, String author, String description, Integer listPrice, Integer salePrice) {
+    public BooksDto(Long id, String title, String author, String description, Integer listPrice, Integer salePrice) {
         this.id = id;
         this.title = title;
         this.author = author;
@@ -36,7 +18,12 @@ public class Books {
         this.salePrice = salePrice;
     }
 
-    public Books() {
+    public BooksDto(String title, String author, String description, Integer listPrice, Integer salePrice) {
+        this.title = title;
+        this.author = author;
+        this.description = description;
+        this.listPrice = listPrice;
+        this.salePrice = salePrice;
     }
 
     public Long getId() {
@@ -85,12 +72,6 @@ public class Books {
 
     public void setSalePrice(Integer salePrice) {
         this.salePrice = salePrice;
-    }
-
-    @Override
-    public String toString() {
-        return "Books [id=" + id + ", title=" + title + ", author=" + author + ", description=" + description
-                + ", listPrice=" + listPrice + ", salePrice=" + salePrice + "]";
     }
 
 }
