@@ -2,14 +2,11 @@ package stevenlan.bookstore.dto;
 
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import jakarta.servlet.http.HttpServletRequest;
-import stevenlan.bookstore.entity.Books;
 
 public class BooksRequest{
 
-    private Books books;
+    private BooksDto books;
 
     private HttpServletRequest request;
 
@@ -17,17 +14,17 @@ public class BooksRequest{
 
     
 
-    public BooksRequest(Books books, HttpServletRequest request, List<Long> booksId) {
+    public BooksRequest(BooksDto books, HttpServletRequest request, List<Long> booksId) {
         this.books = books;
         this.request = request;
         this.booksId = booksId;
     }
 
-    public Books getBooks() {
+    public BooksDto getBooks() {
         return books;
     }
 
-    public void setBooks(Books books) {
+    public void setBooks(BooksDto books) {
         this.books = books;
     }
 

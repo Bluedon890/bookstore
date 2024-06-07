@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
+
+import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
@@ -15,9 +17,9 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.servlet.http.HttpServletRequest;
+import stevenlan.bookstore.dto.BooksDto;
 import stevenlan.bookstore.dto.BooksRequest;
 import stevenlan.bookstore.dto.BooksResponse;
-import stevenlan.bookstore.entity.Books;
 
 @Aspect
 @Component
@@ -26,22 +28,23 @@ public class GetTokenAspect {
     private static final ThreadLocal<BooksRequest> booksRequestThreadLocal = new ThreadLocal<>();
 
     @Pointcut("execution(* src.main.java.stevenlan.bookstore.controller.*(..))")
-    public void pointcut(){}
+    public void pointcut() {
+    }
 
     @Before("execution(* stevenlan.bookstore.controller.BooksController.*(..))")
-    public void booksRequestGenerate(){
+    public void booksRequestGenerate(JoinPoint joinPoint) {
 
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         if (attributes != null) {
+
+            
             HttpServletRequest request = attributes.getRequest();
 
             List<Long> bookIds = getRequestParamValue(request, "bookIds");
 
-            Books books = getRequestBodyValue(request);
-            System.out.println("這呢" + bookIds);
-            System.out.println(books);
+            BooksDto booksDto = getRequestBodyValue(request);
 
-            BooksRequest booksRequest = new BooksRequest(books, request, bookIds);
+            BooksRequest booksRequest = new BooksRequest(booksDto, request, bookIds);
             booksRequestThreadLocal.set(booksRequest);
         }
     }
@@ -53,16 +56,17 @@ public class GetTokenAspect {
     public static void clearThreadLocal() {
         booksRequestThreadLocal.remove();
     }
-    
+
     private List<Long> getRequestParamValue(HttpServletRequest request, String paramName) {
-        String[] values = request.getParameterValues(paramName);
-    
+        String unSplitValue = request.getParameter(paramName);
         List<Long> result = new ArrayList<>();
-        if (values == null) {
+        if (unSplitValue == null) {
             return result;
         }
+        String[] values = unSplitValue.split(",");
+
         for (String value : values) {
-            if(value!=null && !value.isBlank()){
+            if (value != null && !value.isBlank()) {
                 Long id = Long.parseLong(value);
                 result.add(id);
             }
@@ -70,12 +74,12 @@ public class GetTokenAspect {
         return result;
     }
 
-    private Books getRequestBodyValue(HttpServletRequest request) {
+    private BooksDto getRequestBodyValue(HttpServletRequest request) {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
-            return objectMapper.readValue(request.getInputStream(), Books.class);
+            return objectMapper.readValue(request.getInputStream(), BooksDto.class);
         } catch (IOException e) {
-            e.printStackTrace();
+
             return null;
         }
     }
@@ -86,5 +90,4 @@ public class GetTokenAspect {
         clearThreadLocal();
         return ResponseEntity.ok(booksResponse);
     }
-} 
-
+}

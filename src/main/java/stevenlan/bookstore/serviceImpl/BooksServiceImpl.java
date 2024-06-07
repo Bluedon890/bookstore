@@ -10,9 +10,11 @@ import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import stevenlan.bookstore.dto.BooksDto;
 import stevenlan.bookstore.dto.BooksRequest;
 import stevenlan.bookstore.dto.BooksResponse;
 import stevenlan.bookstore.entity.Books;
+
 import stevenlan.bookstore.repository.BooksRepository;
 import stevenlan.bookstore.service.BooksService;
 
@@ -27,16 +29,19 @@ public class BooksServiceImpl implements BooksService {
     @Override
     public BooksResponse getBooksByIds(BooksRequest booksRequest) {
         if (booksRequest.getBooksId().isEmpty() || booksRequest.getBooksId() == null) {
-            List<Books> AllBooks = booksRepository.findAll();
+            List<BooksDto> AllBooks = new ArrayList<>();
+            for (Books book : booksRepository.findAll()) {
+                AllBooks.add(booksToBooksDto(book));
+            }
             return new BooksResponse(
                     employeesService.tokenGenerate(booksRequest.getRequest()),
                     AllBooks, "資料查詢完畢");
         }
-        List<Books> books = new ArrayList<>();
+        List<BooksDto> booksDto = new ArrayList<>();
         String nonExistId = "";
         for (Long id : booksRequest.getBooksId()) {
             if (booksRepository.findById(id).isPresent()) {
-                books.add(booksRepository.findById(id).orElseThrow());
+                booksDto.add(booksToBooksDto(booksRepository.findById(id).orElseThrow()));
             } else {
                 nonExistId += id;
                 nonExistId += ", ";
@@ -45,12 +50,24 @@ public class BooksServiceImpl implements BooksService {
         if (!nonExistId.isBlank()) {
             return new BooksResponse(
                     employeesService.tokenGenerate(booksRequest.getRequest()),
-                    books, "查詢完畢, id為 " + nonExistId + "的資料不存在");
+                    booksDto, "查詢完畢, id為 " + nonExistId + "的資料不存在");
         } else {
             return new BooksResponse(
                     employeesService.tokenGenerate(booksRequest.getRequest()),
-                    books, "查詢完畢");
+                    booksDto, "查詢完畢");
         }
+    }
+
+    private BooksDto booksToBooksDto(Books book) {
+        return BooksDto.builder().id(book.getId()).title(book.getTitle()).author(book.getAuthor())
+                .description(book.getDescription()).listPrice(book.getListPrice())
+                .salePrice(book.getSalePrice()).build();
+    }
+
+    private Books booksDtoToBooks(BooksDto bookDto) {
+        return Books.builder().title(bookDto.getTitle()).author(bookDto.getAuthor())
+                .description(bookDto.getDescription()).listPrice(bookDto.getListPrice())
+                .salePrice(bookDto.getSalePrice()).build();
     }
 
     @Override
@@ -60,10 +77,11 @@ public class BooksServiceImpl implements BooksService {
             return new BooksResponse(null,
                     Arrays.asList(booksRequest.getBooks()), "此書本已存在");
         }
-        booksRepository.save(booksRequest.getBooks());
+        booksRepository.save(booksDtoToBooks(booksRequest.getBooks()));
         return new BooksResponse(
                 employeesService.tokenGenerate(booksRequest.getRequest()),
-                Arrays.asList(booksRequest.getBooks()),
+                Arrays.asList(booksToBooksDto(
+                        booksRepository.findBooksByTitle(booksRequest.getBooks().getTitle()).orElseThrow())),
                 "新增完成");
     }
 
@@ -106,26 +124,26 @@ public class BooksServiceImpl implements BooksService {
                     employeesService.tokenGenerate(booksRequest.getRequest()),
                     null, "更新失敗, 此id之資料不存在");
         } else {
-            Books newBook = booksRequest.getBooks();
-            if (newBook.getTitle() != null && newBook.getTitle().length() > 0
-                    && !Objects.equals(book.getTitle(), newBook.getTitle())) {
-                book.setTitle(newBook.getTitle());
+            BooksDto newBookDto = booksRequest.getBooks();
+            if (newBookDto.getTitle() != null && newBookDto.getTitle().length() > 0
+                    && !Objects.equals(book.getTitle(), newBookDto.getTitle())) {
+                book.setTitle(newBookDto.getTitle());
             }
-            if (newBook.getAuthor() != null && newBook.getAuthor().length() > 0
-                    && !Objects.equals(book.getAuthor(), newBook.getAuthor())) {
-                book.setAuthor(newBook.getAuthor());
+            if (newBookDto.getAuthor() != null && newBookDto.getAuthor().length() > 0
+                    && !Objects.equals(book.getAuthor(), newBookDto.getAuthor())) {
+                book.setAuthor(newBookDto.getAuthor());
             }
-            if (newBook.getDescription() != null && newBook.getDescription().length() > 0
-                    && !Objects.equals(book.getDescription(), newBook.getDescription())) {
-                book.setDescription(newBook.getDescription());
+            if (newBookDto.getDescription() != null && newBookDto.getDescription().length() > 0
+                    && !Objects.equals(book.getDescription(), newBookDto.getDescription())) {
+                book.setDescription(newBookDto.getDescription());
             }
-            if (newBook.getListPrice() != null && newBook.getListPrice() > 0
-                    && !Objects.equals(book.getListPrice(), newBook.getListPrice())) {
-                book.setListPrice(newBook.getListPrice());
+            if (newBookDto.getListPrice() != null && newBookDto.getListPrice() > 0
+                    && !Objects.equals(book.getListPrice(), newBookDto.getListPrice())) {
+                book.setListPrice(newBookDto.getListPrice());
             }
-            if (newBook.getSalePrice() != null && newBook.getSalePrice() > 0
-                    && !Objects.equals(book.getSalePrice(), newBook.getSalePrice())) {
-                book.setSalePrice(newBook.getSalePrice());
+            if (newBookDto.getSalePrice() != null && newBookDto.getSalePrice() > 0
+                    && !Objects.equals(book.getSalePrice(), newBookDto.getSalePrice())) {
+                book.setSalePrice(newBookDto.getSalePrice());
             }
             return new BooksResponse(
                     employeesService.tokenGenerate(booksRequest.getRequest()),

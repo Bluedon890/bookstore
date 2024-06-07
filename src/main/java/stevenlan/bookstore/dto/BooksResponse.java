@@ -2,19 +2,17 @@ package stevenlan.bookstore.dto;
 
 import java.util.List;
 
-import stevenlan.bookstore.entity.Books;
-
 public class BooksResponse {
 
     private String token;
 
-    private List<Books> books;
+    private List<BooksDto> books;
 
     private String message;
 
     
 
-    public BooksResponse(String token, List<Books> books, String message) {
+    public BooksResponse(String token, List<BooksDto> books, String message) {
         this.token = token;
         this.books = books;
         this.message = message;
@@ -36,11 +34,11 @@ public class BooksResponse {
         this.message = message;
     }
 
-    public List<Books> getBooks() {
+    public List<BooksDto> getBooks() {
         return books;
     }
 
-    public void setBooks(List<Books> books) {
+    public void setBooks(List<BooksDto> books) {
         this.books = books;
     }
 
