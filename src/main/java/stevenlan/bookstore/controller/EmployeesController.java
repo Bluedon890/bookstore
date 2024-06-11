@@ -24,12 +24,12 @@ public class EmployeesController {
         this.employeesService = employeesService;
     }
 
-    @PostMapping(path = "{employeesId}")
-    public ArrayList<String> getEmployees(
-            @PathVariable("employeesId") List<Long> ids, HttpServletRequest request) {
-        return employeesService.getEmployeesByIds(ids, request);
+    // @PostMapping(path = "{employeesId}")
+    // public ArrayList<String> getEmployees(
+    //         @PathVariable("employeesId") List<Long> ids, HttpServletRequest request) {
+    //     return employeesService.getEmployeesByIds(ids, request);
 
-    }
+    // }
 
     @DeleteMapping()
     public void deleteEmployees(HttpServletRequest request) {

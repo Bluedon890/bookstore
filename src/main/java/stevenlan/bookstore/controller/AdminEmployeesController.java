@@ -9,11 +9,14 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.servlet.http.HttpServletRequest;
+import stevenlan.bookstore.dto.EmployeesIdsRequestDto;
+import stevenlan.bookstore.dto.EmployeesResponse;
 import stevenlan.bookstore.jwt.entity.AuthenticationResponse;
 import stevenlan.bookstore.serviceImpl.EmployeesServiceImpl;
 
@@ -28,10 +31,10 @@ public class AdminEmployeesController {
         this.EmployeesServiceImpl = EmployeesServiceImpl;
     }
 
-    @PostMapping(path = "{employeesId}")
-    public ArrayList<String> getEmployees(
-            @PathVariable("employeesId") List<Long> ids, HttpServletRequest request) {
-        return EmployeesServiceImpl.getEmployeesByIds(ids, request);
+    @PostMapping(path = "/get")
+    public ResponseEntity<EmployeesResponse> getEmployees(
+            @RequestBody EmployeesIdsRequestDto req) {
+        return ResponseEntity.ok(EmployeesServiceImpl.getEmployeesByIds(req));
     }
 
     @DeleteMapping(path = "{employeesId}")

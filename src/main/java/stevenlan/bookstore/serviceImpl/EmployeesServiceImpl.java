@@ -4,13 +4,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import stevenlan.bookstore.dto.EmployeesDto;
+import stevenlan.bookstore.dto.EmployeesIdsRequestDto;
+import stevenlan.bookstore.dto.EmployeesResponse;
 import stevenlan.bookstore.entity.Employees;
 import stevenlan.bookstore.jwt.entity.AuthenticationResponse;
 import stevenlan.bookstore.jwt.service.AuthenticationService;
@@ -31,45 +37,29 @@ public class EmployeesServiceImpl {
 
     // 查看多筆資料
 
-    public ArrayList<String> getEmployeesByIds(List<Long> ids, HttpServletRequest request) {
-        ArrayList<String> employeesInfo = new ArrayList<>();
-        for (Long id : ids) {
-            employeesInfo.add(getEmployeeById(id));
+    public EmployeesResponse getEmployeesByIds(EmployeesIdsRequestDto req) {
+        List<EmployeesDto> employees= new ArrayList<>();
+
+        for (Long id : req.getEmployeesIds()) {
+            Employees employee = employeesRepository.findById(id).orElseThrow();
+            employees.add(employeeToEmployeeDto(employee));
         }
-        employeesInfo.add(tokenGenerate(request));
-        return employeesInfo;
+        
+        return new EmployeesResponse(employees, "查找完成", 
+        tokenGenerateNew(
+        SecurityContextHolder.getContext().getAuthentication().getName())
+        );
 
     }
 
-    // 查看單筆資料
-    public String getEmployeeById(Long id) {
-
-        List<Object[]> resultList = employeesRepository.findEmployeeById(id);
-
-        String employeeInfo = null;
-
-        for (Object[] result : resultList) {
-            String account = (String) result[0];
-            // String password = (String) result[1];
-            String name = (String) result[2];
-            String email = (String) result[3];
-            String phoneNumber = (String) result[4];
-            employeeInfo = "Account: " + account + ", Name: " + name + ", Email: " + email + ", Phone Number: "
-                    + phoneNumber;
-        }
-
-        return employeeInfo;
+    private EmployeesDto employeeToEmployeeDto(Employees employee) {
+        return EmployeesDto.builder().
+            id(employee.getId()).
+            account(employee.getAccount()).
+            name(employee.getName()).
+            email(employee.getEmail()).
+            phoneNumber(employee.getPhoneNumber()).build();
     }
-
-    // public void addNewEmployees(Employees employees){
-    // Optional<Employees> employeesByAccount =
-    // employeesRepository.findEmployeesByAccount(employees.getAccount());
-
-    // if(employeesByAccount.isPresent()){
-    // throw new IllegalStateException("account taken");
-    // }
-    // employeesRepository.save(employees);
-    // }
 
     // 刪除多筆資料
     @PreAuthorize("hasAuthority('PEOPLE_MANAGER')")
@@ -122,6 +112,18 @@ public class EmployeesServiceImpl {
     public String tokenGenerate(HttpServletRequest request) {
 
         Employees employees = findEmployeeByRequest(request);
+        String newToken = jwtService.generateToken(employees);
+
+        authenticationService.setAllOldTokenLoggedout(employees);
+
+        authenticationService.saveEmployeesToken(newToken, employees);
+
+        return newToken;
+    }
+
+    public String tokenGenerateNew(String account) {
+
+        Employees employees = employeesRepository.findEmployeesByAccount(account).orElseThrow();
         String newToken = jwtService.generateToken(employees);
 
         authenticationService.setAllOldTokenLoggedout(employees);

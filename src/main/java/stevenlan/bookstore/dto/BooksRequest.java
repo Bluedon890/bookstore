@@ -12,8 +12,6 @@ public class BooksRequest{
 
     private List<Long> booksId;
 
-    
-
     public BooksRequest(BooksDto books, HttpServletRequest request, List<Long> booksId) {
         this.books = books;
         this.request = request;

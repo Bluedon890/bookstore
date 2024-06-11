@@ -23,13 +23,10 @@ import stevenlan.bookstore.dto.BooksResponse;
 
 @Aspect
 @Component
+// 是不需要的
 public class GetTokenAspect {
 
     private static final ThreadLocal<BooksRequest> booksRequestThreadLocal = new ThreadLocal<>();
-
-    @Pointcut("execution(* src.main.java.stevenlan.bookstore.controller.*(..))")
-    public void pointcut() {
-    }
 
     @Before("execution(* stevenlan.bookstore.controller.BooksController.*(..))")
     public void booksRequestGenerate(JoinPoint joinPoint) {
@@ -37,7 +34,6 @@ public class GetTokenAspect {
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         if (attributes != null) {
 
-            
             HttpServletRequest request = attributes.getRequest();
 
             List<Long> bookIds = getRequestParamValue(request, "bookIds");
