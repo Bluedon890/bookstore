@@ -7,20 +7,21 @@ import java.util.stream.Collectors;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
 @Data
 @NoArgsConstructor
-public class EmployeesIdsRequestDto {
+public class BooksIdsRequest{
 
-    private String employeesIds;
+    private String booksIds;
 
-    public List<Long> getEmployeesIds() {
-        if(employeesIds.isEmpty()||employeesIds==""){
+    
+    public List<Long> getBooksIds() {
+        if(booksIds.isEmpty()||booksIds==""){
             return null;
         }
-        List<Long> Ids = Arrays.stream(employeesIds.split(","))
+        List<Long> Ids = Arrays.stream(booksIds.split(","))
                 .map(Long::valueOf)
                 .collect(Collectors.toList());
         return Ids;
     }
-
 }

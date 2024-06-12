@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.servlet.http.HttpServletRequest;
 import stevenlan.bookstore.dto.EmployeesIdsRequestDto;
 import stevenlan.bookstore.dto.EmployeesResponse;
+import stevenlan.bookstore.dto.EmployeesUpdateRequest;
 import stevenlan.bookstore.jwt.entity.AuthenticationResponse;
 import stevenlan.bookstore.serviceImpl.EmployeesServiceImpl;
 
@@ -31,30 +32,24 @@ public class AdminEmployeesController {
         this.EmployeesServiceImpl = EmployeesServiceImpl;
     }
 
-    @PostMapping(path = "/get")
+    @PostMapping(value = "/get")
     public ResponseEntity<EmployeesResponse> getEmployees(
-            @RequestBody EmployeesIdsRequestDto req) {
-        return ResponseEntity.ok(EmployeesServiceImpl.getEmployeesByIds(req));
+            @RequestBody EmployeesIdsRequestDto ids) {
+        return ResponseEntity.ok(EmployeesServiceImpl.getEmployeesByIds(ids));
     }
 
-    @DeleteMapping(path = "{employeesId}")
-    public String deleteEmployees(
-            @PathVariable("employeesId") List<Long> ids, HttpServletRequest request) {
-        return EmployeesServiceImpl.deleteEmployeesByIds(ids, request);
+    @DeleteMapping(value = "/delete")
+    public ResponseEntity<EmployeesResponse> deleteEmployees(
+        @RequestBody EmployeesIdsRequestDto ids) {
+        return ResponseEntity.ok(EmployeesServiceImpl.deleteEmployeesByIds(ids));
     }
 
-    @PutMapping(path = "{employeesId}")
-    public ResponseEntity<AuthenticationResponse> updateEmployees(
-            @PathVariable("employeesId") Long employeesId,
-            @RequestParam(required = false) String name,
-            @RequestParam(required = false) String account,
-            @RequestParam(required = false) String password,
-            @RequestParam(required = false) String email,
-            @RequestParam(required = false) String phoneNumber,
-            HttpServletRequest request) {
-        return ResponseEntity.ok(
-                EmployeesServiceImpl.updateEmployee(employeesId, name, account, password, email, phoneNumber, request));
+    @PutMapping(value = "/update")
+    public ResponseEntity<EmployeesResponse> updateEmployees(
+        @RequestBody EmployeesUpdateRequest req) {
+        return ResponseEntity.ok(EmployeesServiceImpl.updateEmployee(req));
 
     }
+    
 
 }

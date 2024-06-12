@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
+import stevenlan.bookstore.dto.EmployeesRequestDto;
 import stevenlan.bookstore.entity.Employees;
 import stevenlan.bookstore.jwt.entity.AuthenticationResponse;
 import stevenlan.bookstore.jwt.service.AuthenticationService;
@@ -21,10 +22,10 @@ public class AuthenticationController {
 
     @PostMapping("/v1/adminregister")
     public ResponseEntity<AuthenticationResponse> adminregister(
-            @RequestBody Employees request,
-            @RequestParam List<String> roles) {
+            @RequestBody EmployeesRequestDto request) {
 
-        return ResponseEntity.ok(authService.adminRegister(request, roles));
+        return ResponseEntity.ok(authService.adminRegister(request
+        ));
     }
 
     @PostMapping("/v1/employeesregister")

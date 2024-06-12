@@ -1,15 +1,17 @@
 package stevenlan.bookstore.service;
 
-import stevenlan.bookstore.dto.BooksRequest;
+import stevenlan.bookstore.dto.BooksIdsRequest;
+import stevenlan.bookstore.dto.BooksRequestDto;
 import stevenlan.bookstore.dto.BooksResponse;
+import stevenlan.bookstore.dto.BooksUpdateRequestDto;
 
 public interface BooksService {
 
-    BooksResponse getBooksByIds(BooksRequest booksRequest);
+    BooksResponse getBooksByIds(BooksIdsRequest booksRequest);
 
-    BooksResponse addNewBooks(BooksRequest booksRequest);
+    BooksResponse addNewBooks(BooksRequestDto booksRequest);
 
-    BooksResponse deleteBooks(BooksRequest booksRequest);
+    BooksResponse deleteBooks(BooksIdsRequest booksRequest);
 
-    BooksResponse updateBooks(BooksRequest booksRequest);
+    BooksResponse updateBooks(BooksUpdateRequestDto booksRequest);
 }

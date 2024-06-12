@@ -2,13 +2,17 @@ package stevenlan.bookstore.dto;
 
 import java.util.List;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import stevenlan.bookstore.entity.Role;
 
 @Data
 @NoArgsConstructor
-public class EmployeesRequestDto {
+public class EmployeesUpdateRequest {
+
+    @NotNull(message = "請填要更改的id!")
+    private Long employeesId;
 
     private String account;
 
@@ -21,5 +25,4 @@ public class EmployeesRequestDto {
     private String phoneNumber;
 
     private List<Role> roles;
-
 }
