@@ -1,12 +1,12 @@
 package stevenlan.bookstore.jwt.service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -28,7 +28,7 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     private final TokenRepository tokenRepository;
-
+   
     public AuthenticationService(EmployeesRepository empRepository,
             PasswordEncoder passwordEncoder,
             JwtService jwtService,
@@ -42,7 +42,8 @@ public class AuthenticationService {
     }
 
     // 管理層註冊
-    public AuthenticationResponse adminRegister(EmployeesRequestDto request) {
+    @PreAuthorize("hasAuthority('PEOPLE_MANAGER')")
+    public AuthenticationResponse pmRegister(EmployeesRequestDto request) {
 
         if (empRepository.findEmployeesByAccount(request.getAccount()).isPresent()) {
             return new AuthenticationResponse(null, "此帳號已存在");
@@ -132,5 +133,23 @@ public class AuthenticationService {
             });
         }
         tokenRepository.saveAll(validTokensList);
+    }
+
+    // 從contextholder中取account來生成新token
+    public String tokenGenerateTokenFromContextholder() {
+
+        String account = SecurityContextHolder.getContext().getAuthentication().getName();
+        if (empRepository.findEmployeesByAccount(account).isPresent()) {
+            Employees employees = empRepository.findEmployeesByAccount(account).orElseThrow();
+            String newToken = jwtService.generateToken(employees);
+
+            setAllOldTokenLoggedout(employees);
+
+            saveEmployeesToken(newToken, employees);
+
+            return newToken;
+        } else {
+            return ("請重新登入");
+        }
     }
 }

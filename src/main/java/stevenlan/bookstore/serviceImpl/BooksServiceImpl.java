@@ -32,8 +32,7 @@ public class BooksServiceImpl implements BooksService {
 
     @Override
     public BooksResponse getBooksByIds(BooksIdsRequest ids) {
-        //判斷ids有沒有值 預計移至dto判斷
-        if (ids.getBooksIds().isEmpty() || ids.getBooksIds() == null) {
+        if (ids.getBooksIds() == null) {
             //若無輸入 則視為查詢全部
             List<BooksDto> AllBooks = new ArrayList<>();
             for (Books book : booksRepository.findAll()) {
@@ -96,7 +95,7 @@ public class BooksServiceImpl implements BooksService {
     @PreAuthorize("hasAuthority('BOOK_MANAGER')")
     public BooksResponse deleteBooks(BooksIdsRequest booksRequest) {
         //同上
-        if (booksRequest.getBooksIds().isEmpty()) {
+        if (booksRequest.getBooksIds()==null) {
             return new BooksResponse(null, null, "請輸入欲刪除的書本id");
         }
         String nonExistId = "";
@@ -121,11 +120,12 @@ public class BooksServiceImpl implements BooksService {
     @Transactional
     @PreAuthorize("hasAuthority('BOOK_MANAGER')")
     public BooksResponse updateBooks(BooksUpdateRequestDto booksRequest) {
-        // if (booksRequest.getBookIds().) {
-        //     return new BooksResponse(null, null, "請輸入欲更新的書本id");
-        // }
+        if (booksRequest.getBookId()==null) {
+            return new BooksResponse(null, null, "請輸入欲更新的書本id");
+        }
 
-        //應該能簡化 之後試
+        // 應該能簡化 之後試
+        logger.info("id呢我Id呢???????????????????"+booksRequest.toString());
         Books book = booksRepository.findById(booksRequest.getBookId()).orElse(null);
         if (book == null) {
             return new BooksResponse(
@@ -133,26 +133,26 @@ public class BooksServiceImpl implements BooksService {
                     null, "更新失敗, 此id之資料不存在");
         } else {
             //應該移到dto做判斷
-            BooksRequestDto newBookDto = booksRequest.getBooksRequestDto();
-            if (newBookDto.getTitle() != null && newBookDto.getTitle().length() > 0
-                    && !Objects.equals(book.getTitle(), newBookDto.getTitle())) {
-                book.setTitle(newBookDto.getTitle());
+            
+            if (booksRequest.getTitle() != null && booksRequest.getTitle().length() > 0
+                    && !Objects.equals(book.getTitle(), booksRequest.getTitle())) {
+                book.setTitle(booksRequest.getTitle());
             }
-            if (newBookDto.getAuthor() != null && newBookDto.getAuthor().length() > 0
-                    && !Objects.equals(book.getAuthor(), newBookDto.getAuthor())) {
-                book.setAuthor(newBookDto.getAuthor());
+            if (booksRequest.getAuthor() != null && booksRequest.getAuthor().length() > 0
+                    && !Objects.equals(book.getAuthor(), booksRequest.getAuthor())) {
+                book.setAuthor(booksRequest.getAuthor());
             }
-            if (newBookDto.getDescription() != null && newBookDto.getDescription().length() > 0
-                    && !Objects.equals(book.getDescription(), newBookDto.getDescription())) {
-                book.setDescription(newBookDto.getDescription());
+            if (booksRequest.getDescription() != null && booksRequest.getDescription().length() > 0
+                    && !Objects.equals(book.getDescription(), booksRequest.getDescription())) {
+                book.setDescription(booksRequest.getDescription());
             }
-            if (newBookDto.getListPrice() != null && newBookDto.getListPrice() > 0
-                    && !Objects.equals(book.getListPrice(), newBookDto.getListPrice())) {
-                book.setListPrice(newBookDto.getListPrice());
+            if (booksRequest.getListPrice() != null && booksRequest.getListPrice() > 0
+                    && !Objects.equals(book.getListPrice(), booksRequest.getListPrice())) {
+                book.setListPrice(booksRequest.getListPrice());
             }
-            if (newBookDto.getSalePrice() != null && newBookDto.getSalePrice() > 0
-                    && !Objects.equals(book.getSalePrice(), newBookDto.getSalePrice())) {
-                book.setSalePrice(newBookDto.getSalePrice());
+            if (booksRequest.getSalePrice() != null && booksRequest.getSalePrice() > 0
+                    && !Objects.equals(book.getSalePrice(), booksRequest.getSalePrice())) {
+                book.setSalePrice(booksRequest.getSalePrice());
             }
             return new BooksResponse(
                     null,

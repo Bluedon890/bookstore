@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import stevenlan.bookstore.dto.BooksIdsRequest;
 import stevenlan.bookstore.dto.BooksRequestDto;
@@ -39,7 +40,7 @@ public class BooksController {
     }
 
     @PutMapping(value = "/update")
-    public ResponseEntity<BooksResponse> updateBooks(@RequestBody BooksUpdateRequestDto req) {
+    public ResponseEntity<BooksResponse> updateBooks(@RequestBody @Valid BooksUpdateRequestDto req) {
         return ResponseEntity.ok(booksService.updateBooks(req));
     }
 }

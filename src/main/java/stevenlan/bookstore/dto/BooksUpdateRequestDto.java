@@ -9,8 +9,18 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class BooksUpdateRequestDto{
 
+    //沒有用
     @NotNull(message = "請填要更改的id!")
-    private Long BookId;
+    //b不能是大寫!!
+    private Long bookId;
 
-    private BooksRequestDto booksRequestDto;
+    private String title;
+
+    private String author;
+
+    private String description;
+
+    private Integer listPrice;
+    
+    private Integer salePrice;
 }

@@ -28,7 +28,7 @@ public class EmployeesConfig {
 				"steven",
 				"2400398@systex.com.tw",
 				"123465789",
-                List.of(Role.ADMIN)
+                List.of(Role.PEOPLE_MANAGER, Role.BOOK_MANAGER)
 			);
 
     //         Employees alex = new Employees(
