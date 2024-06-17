@@ -34,6 +34,8 @@ public class SecurityConfig {
 
     private final CustomAccessDeniedHandler customAccessDeniedHandler;
 
+    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
+
     private final static String[] WHITE_LISTS_URL = { "/v1/login/**", "/v1/employeesregister/**", "/swagger-ui/**",
             "/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui.html/**" };
 
@@ -53,11 +55,7 @@ public class SecurityConfig {
                                 .authenticated())
                 .userDetailsService(empServiceImp)
                 .exceptionHandling(e -> e.accessDeniedHandler(customAccessDeniedHandler)
-                        .authenticationEntryPoint((request, response, authException) -> {
-                            response.setCharacterEncoding("UTF-8");
-                            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                            response.getWriter().write("無效的驗證碼,請重新輸入或登入");
-                        }))
+                        .authenticationEntryPoint(customAuthenticationEntryPoint))
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)

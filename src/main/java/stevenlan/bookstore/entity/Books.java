@@ -1,6 +1,7 @@
 package stevenlan.bookstore.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 
 @Builder
@@ -10,13 +11,23 @@ public class Books {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
-    // @Column(name = "書本id")
+    @Column(name = "書本id")
     private Long id;
+
+    @Column(name = "書名", nullable = false, length = 50)
+    @NotNull(message = "書名不可為空")
     private String title;
+
+    @Column(name = "作者", length = 50)
     private String author;
+
+    @Column(name = "簡述", length = 200)
     private String description;
+
+    @Column(name = "定價")
     private Integer listPrice;
+
+    @Column(name = "售價")
     private Integer salePrice;
 
     public Books(String title, String author, String description, Integer listPrice, Integer salePrice) {

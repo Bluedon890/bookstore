@@ -30,7 +30,7 @@ public class BooksController {
     }
 
     @PostMapping(value = "/add")
-    public ResponseEntity<BooksResponse> addNewBooks(@RequestBody BooksRequestDto req) {
+    public ResponseEntity<BooksResponse> addNewBooks(@RequestBody @Valid BooksRequestDto req) {
         return ResponseEntity.ok(booksService.addNewBooks(req));
     }
 
@@ -40,7 +40,7 @@ public class BooksController {
     }
 
     @PutMapping(value = "/update")
-    public ResponseEntity<BooksResponse> updateBooks(@RequestBody @Valid BooksUpdateRequestDto req) {
+    public ResponseEntity<BooksResponse> updateBooks(@RequestBody BooksUpdateRequestDto req) {
         return ResponseEntity.ok(booksService.updateBooks(req));
     }
 }

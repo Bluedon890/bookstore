@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import stevenlan.bookstore.jwt.entity.Token;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -17,21 +18,27 @@ public class Employees implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
+    @Column(name = "員工id")
     private Long id;
 
+    @Column(name = "帳號", nullable = false, unique = true, length = 50)
     private String account;
 
+    @Column(name = "密碼", nullable = false)
     private String password;
 
+    @Column(name = "姓名", nullable = false, length = 50)
     private String name;
 
+    @Column(name = "Email")
     private String email;
 
+    @Column(name = "電話", length = 20)
     private String phoneNumber;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @Enumerated(value = EnumType.STRING)
+    @Column(name = "身份")
     private List<Role> roles;
 
     @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "employees")

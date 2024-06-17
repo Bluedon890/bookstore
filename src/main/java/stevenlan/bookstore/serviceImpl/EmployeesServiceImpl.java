@@ -3,25 +3,19 @@ package stevenlan.bookstore.serviceImpl;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.logging.Logger;
-
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import stevenlan.bookstore.dto.BooksResponse;
 import stevenlan.bookstore.dto.EmployeesDtoForResponse;
 import stevenlan.bookstore.dto.EmployeesIdsRequestDto;
 import stevenlan.bookstore.dto.EmployeesResponse;
 import stevenlan.bookstore.dto.EmployeesUpdateRequest;
 import stevenlan.bookstore.dto.EmployeesUserUpdateDto;
 import stevenlan.bookstore.entity.Employees;
-import stevenlan.bookstore.jwt.service.AuthenticationService;
-import stevenlan.bookstore.jwt.service.JwtService;
 import stevenlan.bookstore.repository.EmployeesRepository;
 import stevenlan.bookstore.service.EmlpoyeesService;
 
@@ -29,13 +23,11 @@ import stevenlan.bookstore.service.EmlpoyeesService;
 @RequiredArgsConstructor
 public class EmployeesServiceImpl implements EmlpoyeesService{
 
-    private static final Logger logger = Logger.getLogger(AuthenticationService.class.getName());
-
     private final EmployeesRepository employeesRepository;
 
     private final PasswordEncoder passwordEncoder;
 
-    private final JwtService jwtService;
+    
 
     // 查看多筆資料
     public EmployeesResponse getEmployeesByIds(EmployeesIdsRequestDto ids) {
@@ -115,6 +107,9 @@ public class EmployeesServiceImpl implements EmlpoyeesService{
         if (employees == null) {
             return new EmployeesResponse(null, null, "此id沒有資料, 請輸入正確的員工id");
         }
+        // if(employeesRepository.findEmployeesByAccount(req.getAccount()).isPresent()){
+        //     return new EmployeesResponse(null,null,"已存在此書本");
+        // }
         if (req.getName() != null && req.getName().length() > 0
                 && !Objects.equals(employees.getName(), req.getName())) {
             employees.setName(req.getName());
@@ -132,7 +127,7 @@ public class EmployeesServiceImpl implements EmlpoyeesService{
             employees.setPhoneNumber(req.getPhoneNumber());
         }
         if (req.getAccount() != null && req.getAccount().length() > 0
-                && !Objects.equals(employees.getAccount(), req.getAccount())) {
+                && !Objects.equals(employees.getAccount(), req.getAccount()) ) {
             employees.setAccount(req.getAccount());
         }
         if (req.getRoles() != null && !Objects.equals(employees.getRole(), req.getRoles())) {
@@ -172,12 +167,5 @@ public class EmployeesServiceImpl implements EmlpoyeesService{
         return new EmployeesResponse(null, employee, "更新成功");
     }
 
-    // 從httprequest中取得token中的username並查詢
-    public Employees findEmployeeByRequest(HttpServletRequest request) {
-        String authHeader = request.getHeader("Authorization");
-        String token = authHeader.substring(7);
-        String username = jwtService.extractUsername(token);
-        Employees employees = employeesRepository.findEmployeesByAccount(username).orElseThrow();
-        return employees;
-    }
+    
 }

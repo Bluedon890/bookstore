@@ -75,6 +75,10 @@ public class BooksServiceImpl implements BooksService {
     @Override
     @PreAuthorize("hasAuthority('BOOK_MANAGER')")
     public BooksResponse addNewBooks(BooksRequestDto booksRequest) {
+        
+        if(booksRequest.isTitleEmpty()){
+            return new BooksResponse(null, null, "請輸入正確書名");
+        }
         //判斷是否已存在書本(同名)
         Optional<Books> presentBook = booksRepository.findBooksByTitle(booksRequest.getTitle());
         if (presentBook.isPresent()) {
@@ -86,7 +90,7 @@ public class BooksServiceImpl implements BooksService {
         return new BooksResponse(
                 null,
                 Arrays.asList(booksToBooksDto(
-                    //藉由查詢順便驗證是否成功存入 日後考慮做好unit test後簡化程式碼方便閱讀
+                    
                     booksRepository.findBooksByTitle(booksRequest.getTitle()).orElseThrow())),
                 "新增完成");
     }

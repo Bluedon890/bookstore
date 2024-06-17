@@ -1,6 +1,7 @@
 package stevenlan.bookstore.controller;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -13,6 +14,8 @@ import lombok.RequiredArgsConstructor;
 import stevenlan.bookstore.dto.EmployeesIdsRequestDto;
 import stevenlan.bookstore.dto.EmployeesResponse;
 import stevenlan.bookstore.dto.EmployeesUserUpdateDto;
+import stevenlan.bookstore.entity.Employees;
+import stevenlan.bookstore.repository.EmployeesRepository;
 import stevenlan.bookstore.service.EmlpoyeesService;
 
 
@@ -23,6 +26,8 @@ public class EmployeesController {
 
     private final EmlpoyeesService employeesService;
 
+    private final EmployeesRepository employeesRepository;
+
     // 不輸入就是GetAll
     @PostMapping(value = "/get")
     public ResponseEntity<EmployeesResponse> getEmployees(
@@ -32,8 +37,10 @@ public class EmployeesController {
 
     @DeleteMapping(value = "/delete")
     public String deleteEmployees(HttpServletRequest request) {
+        Employees employees = employeesRepository.findEmployeesByAccount(
+                SecurityContextHolder.getContext().getAuthentication().getName()).orElse(null);
         employeesService.deleteEmployeeById(
-                employeesService.findEmployeeByRequest(request).getId());
+                employees.getId());
         return ("您的帳號已刪除");
     }
 
