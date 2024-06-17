@@ -15,7 +15,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import stevenlan.bookstore.jwt.filter.JwtAuthenticationFilter;
 import stevenlan.bookstore.serviceImpl.EmployeesDetailsService;
@@ -47,10 +46,6 @@ public class SecurityConfig {
                 .authorizeHttpRequests(
                         req -> req.requestMatchers(WHITE_LISTS_URL)
                                 .permitAll()
-                                .requestMatchers(
-                                        "/admin_only/**",
-                                        "/v1/adminregister/**")
-                                .hasAuthority("ADMIN")
                                 .anyRequest()
                                 .authenticated())
                 .userDetailsService(empServiceImp)

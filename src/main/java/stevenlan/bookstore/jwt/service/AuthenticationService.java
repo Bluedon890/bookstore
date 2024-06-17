@@ -10,10 +10,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import stevenlan.bookstore.dto.EmployeesRegisterRequest;
 import stevenlan.bookstore.dto.EmployeesRequestDto;
+import stevenlan.bookstore.dto.LoginRequestDto;
 import stevenlan.bookstore.entity.Employees;
 import stevenlan.bookstore.entity.Role;
-import stevenlan.bookstore.jwt.entity.AuthenticationResponse;
+import stevenlan.bookstore.jwt.dto.AuthenticationResponse;
 import stevenlan.bookstore.jwt.entity.Token;
 import stevenlan.bookstore.jwt.repository.TokenRepository;
 import stevenlan.bookstore.repository.EmployeesRepository;
@@ -67,9 +69,9 @@ public class AuthenticationService {
     }
 
     // 員工註冊
-    public AuthenticationResponse employeesRegister(Employees request) {
+    public AuthenticationResponse employeesRegister(EmployeesRegisterRequest request) {
 
-        if (empRepository.findEmployeesByAccount(request.getUsername()).isPresent()) {
+        if (empRepository.findEmployeesByAccount(request.getAccount()).isPresent()) {
             return new AuthenticationResponse(null, "此帳號已存在");
         }
         Employees employees = new Employees();
@@ -92,14 +94,14 @@ public class AuthenticationService {
     }
 
     // 登入
-    public AuthenticationResponse authenticate(Employees request) {
+    public AuthenticationResponse authenticate(LoginRequestDto request) {
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
-                            request.getUsername(),
+                            request.getAccount(),
                             request.getPassword()));
 
-            Employees employees = empRepository.findEmployeesByAccount(request.getUsername()).orElseThrow();
+            Employees employees = empRepository.findEmployeesByAccount(request.getAccount()).orElseThrow();
             String token = jwtService.generateToken(employees);
 
             setAllOldTokenLoggedout(employees);

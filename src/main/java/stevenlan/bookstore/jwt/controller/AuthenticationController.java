@@ -6,9 +6,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
+import stevenlan.bookstore.dto.EmployeesRegisterRequest;
 import stevenlan.bookstore.dto.EmployeesRequestDto;
-import stevenlan.bookstore.entity.Employees;
-import stevenlan.bookstore.jwt.entity.AuthenticationResponse;
+
+import stevenlan.bookstore.dto.LoginRequestDto;
+import stevenlan.bookstore.jwt.dto.AuthenticationResponse;
 import stevenlan.bookstore.jwt.service.AuthenticationService;
 
 @RestController
@@ -26,14 +28,14 @@ public class AuthenticationController {
 
     @PostMapping("/v1/employeesregister")
     public ResponseEntity<AuthenticationResponse> employeesregister(
-            @RequestBody Employees request) {
+            @RequestBody EmployeesRegisterRequest request) {
 
         return ResponseEntity.ok(authService.employeesRegister(request));
     }
 
     @PostMapping("/v1/login")
     public ResponseEntity<AuthenticationResponse> login(
-            @RequestBody Employees request) {
+            @RequestBody LoginRequestDto request) {
         return ResponseEntity.ok(authService.authenticate(request));
     }
 

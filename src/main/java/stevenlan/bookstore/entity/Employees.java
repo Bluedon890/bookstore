@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.List;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
 import stevenlan.bookstore.jwt.entity.Token;
 
 import org.springframework.security.core.GrantedAuthority;

@@ -17,7 +17,7 @@ import stevenlan.bookstore.service.EmlpoyeesService;
 @RestController
 @RequestMapping(path = "api/v1/employees/pm")
 @RequiredArgsConstructor
-public class AdminEmployeesController {
+public class EmployeesManagerController {
 
     private final EmlpoyeesService employeesService;
 
