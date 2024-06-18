@@ -1,4 +1,4 @@
-package stevenlan.bookstore.jwt.cofig;
+package stevenlan.bookstore.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,7 +16,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import lombok.RequiredArgsConstructor;
-import stevenlan.bookstore.jwt.filter.JwtAuthenticationFilter;
+import stevenlan.bookstore.filter.JwtAuthenticationFilter;
 import stevenlan.bookstore.serviceImpl.EmployeesDetailsService;
 
 @Configuration
@@ -49,7 +49,8 @@ public class SecurityConfig {
                                 .anyRequest()
                                 .authenticated())
                 .userDetailsService(empServiceImp)
-                .exceptionHandling(e -> e.accessDeniedHandler(customAccessDeniedHandler)
+                .exceptionHandling(e -> e
+                        .accessDeniedHandler(customAccessDeniedHandler)
                         .authenticationEntryPoint(customAuthenticationEntryPoint))
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))

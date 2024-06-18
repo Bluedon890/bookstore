@@ -1,4 +1,4 @@
-package stevenlan.bookstore.jwt.controller;
+package stevenlan.bookstore.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -6,12 +6,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
+import stevenlan.bookstore.dto.AuthenticationResponse;
 import stevenlan.bookstore.dto.EmployeesRegisterRequest;
 import stevenlan.bookstore.dto.EmployeesRequestDto;
 
 import stevenlan.bookstore.dto.LoginRequestDto;
-import stevenlan.bookstore.jwt.dto.AuthenticationResponse;
-import stevenlan.bookstore.jwt.service.AuthenticationService;
+import stevenlan.bookstore.serviceImpl.AuthenticationService;
 
 @RestController
 @RequiredArgsConstructor

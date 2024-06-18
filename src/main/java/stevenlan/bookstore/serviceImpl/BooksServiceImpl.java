@@ -18,7 +18,6 @@ import stevenlan.bookstore.dto.BooksRequestDto;
 import stevenlan.bookstore.dto.BooksResponse;
 import stevenlan.bookstore.dto.BooksUpdateRequestDto;
 import stevenlan.bookstore.entity.Books;
-import stevenlan.bookstore.jwt.service.AuthenticationService;
 import stevenlan.bookstore.repository.BooksRepository;
 import stevenlan.bookstore.service.BooksService;
 
@@ -50,6 +49,7 @@ public class BooksServiceImpl implements BooksService {
                 nonExistId += id;
                 nonExistId += ", ";
             }
+            
         }
         if (!nonExistId.isBlank()) {
             return new BooksResponse(null,
@@ -58,6 +58,7 @@ public class BooksServiceImpl implements BooksService {
             return new BooksResponse(null,
                     booksDto, "查詢完畢");
         }
+        
     }
 
     private BooksDto booksToBooksDto(Books book) {

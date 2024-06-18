@@ -1,4 +1,4 @@
-package stevenlan.bookstore.jwt.dto;
+package stevenlan.bookstore.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

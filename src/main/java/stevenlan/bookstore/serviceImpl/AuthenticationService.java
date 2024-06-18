@@ -1,4 +1,4 @@
-package stevenlan.bookstore.jwt.service;
+package stevenlan.bookstore.serviceImpl;
 
 import java.util.List;
 
@@ -10,15 +10,15 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import stevenlan.bookstore.dto.AuthenticationResponse;
 import stevenlan.bookstore.dto.EmployeesRegisterRequest;
 import stevenlan.bookstore.dto.EmployeesRequestDto;
 import stevenlan.bookstore.dto.LoginRequestDto;
 import stevenlan.bookstore.entity.Employees;
 import stevenlan.bookstore.entity.Role;
-import stevenlan.bookstore.jwt.dto.AuthenticationResponse;
-import stevenlan.bookstore.jwt.entity.Token;
-import stevenlan.bookstore.jwt.repository.TokenRepository;
+import stevenlan.bookstore.entity.Token;
 import stevenlan.bookstore.repository.EmployeesRepository;
+import stevenlan.bookstore.repository.TokenRepository;
 
 @Service
 public class AuthenticationService {
@@ -142,7 +142,7 @@ public class AuthenticationService {
 
         String account = SecurityContextHolder.getContext().getAuthentication().getName();
         if (empRepository.findEmployeesByAccount(account).isPresent()) {
-            Employees employees = empRepository.findEmployeesByAccount(account).orElseThrow();
+            Employees employees = empRepository.findEmployeesByAccount(account).get();
             String newToken = jwtService.generateToken(employees);
 
             setAllOldTokenLoggedout(employees);

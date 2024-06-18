@@ -15,10 +15,8 @@ public class EmployeesResponse{
     
     private String jwtToken;
 
-    @JsonProperty("員工資料")
     private List<EmployeesDtoForResponse> employeesDtos;
 
     private String message;
-
     
 }

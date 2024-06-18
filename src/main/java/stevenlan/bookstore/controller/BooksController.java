@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import stevenlan.bookstore.dto.BooksIdsRequest;
 import stevenlan.bookstore.dto.BooksRequestDto;
@@ -30,7 +29,7 @@ public class BooksController {
     }
 
     @PostMapping(value = "/add")
-    public ResponseEntity<BooksResponse> addNewBooks(@RequestBody @Valid BooksRequestDto req) {
+    public ResponseEntity<BooksResponse> addNewBooks(@RequestBody BooksRequestDto req) {
         return ResponseEntity.ok(booksService.addNewBooks(req));
     }
 

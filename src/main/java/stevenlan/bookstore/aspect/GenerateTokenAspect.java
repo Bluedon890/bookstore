@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import lombok.RequiredArgsConstructor;
 import stevenlan.bookstore.dto.BooksResponse;
 import stevenlan.bookstore.dto.EmployeesResponse;
-import stevenlan.bookstore.jwt.service.AuthenticationService;
+import stevenlan.bookstore.serviceImpl.AuthenticationService;
 
 @Aspect
 @Component
@@ -36,10 +36,10 @@ public class GenerateTokenAspect {
             return ResponseEntity.ok(employeesResponse);
         } else if (body instanceof BooksResponse) {
 
-            BooksResponse bookResponse = (BooksResponse) body;
-            bookResponse.setToken(authenticationService.tokenGenerateTokenFromContextholder());
+            BooksResponse booksResponse = (BooksResponse) body;
+            booksResponse.setToken(authenticationService.tokenGenerateTokenFromContextholder());
 
-            return ResponseEntity.ok(bookResponse);
+            return ResponseEntity.ok(booksResponse);
         }
         return result;
     }

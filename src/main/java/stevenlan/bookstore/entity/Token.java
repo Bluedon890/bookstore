@@ -1,7 +1,6 @@
-package stevenlan.bookstore.jwt.entity;
+package stevenlan.bookstore.entity;
 
 import jakarta.persistence.*;
-import stevenlan.bookstore.entity.Employees;
 
 @Entity
 @Table(name = "token")

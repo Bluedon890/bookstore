@@ -1,4 +1,4 @@
-package stevenlan.bookstore.jwt.cofig;
+package stevenlan.bookstore.config;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
@@ -6,8 +6,8 @@ import org.springframework.stereotype.Component;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import stevenlan.bookstore.jwt.entity.Token;
-import stevenlan.bookstore.jwt.repository.TokenRepository;
+import stevenlan.bookstore.entity.Token;
+import stevenlan.bookstore.repository.TokenRepository;
 
 @Component
 public class CustomLogoutHandler implements LogoutHandler {

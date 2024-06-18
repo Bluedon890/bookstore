@@ -1,4 +1,4 @@
-package stevenlan.bookstore.jwt.cofig;
+package stevenlan.bookstore.config;
 
 import java.io.IOException;
 

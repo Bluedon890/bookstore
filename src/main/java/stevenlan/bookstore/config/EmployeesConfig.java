@@ -31,13 +31,6 @@ public class EmployeesConfig {
                 List.of(Role.PEOPLE_MANAGER, Role.BOOK_MANAGER)
 			);
 
-    //         Employees alex = new Employees(
-	// 			"234",
-	// 			"567",
-	// 			"alex",
-	// 			"890",
-	// 			"987654321"
-    //         );
 
             eRepository.saveAll(
                 List.of(steven)

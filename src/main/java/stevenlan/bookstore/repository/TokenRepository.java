@@ -1,4 +1,4 @@
-package stevenlan.bookstore.jwt.repository;
+package stevenlan.bookstore.repository;
 
 import java.util.List;
 import java.util.Optional;
@@ -6,7 +6,7 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import stevenlan.bookstore.jwt.entity.Token;
+import stevenlan.bookstore.entity.Token;
 
 public interface TokenRepository extends JpaRepository<Token, Integer> {
 

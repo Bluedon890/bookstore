@@ -2,13 +2,11 @@ package stevenlan.bookstore.dto;
 
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 public class BooksResponse {
 
     private String token;
     
-    @JsonProperty("書籍資料")
+    
     private List<BooksDto> books;
 
     private String message;

@@ -1,4 +1,4 @@
-package stevenlan.bookstore.jwt.service;
+package stevenlan.bookstore.serviceImpl;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -6,7 +6,8 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import stevenlan.bookstore.entity.Employees;
-import stevenlan.bookstore.jwt.repository.TokenRepository;
+import stevenlan.bookstore.repository.TokenRepository;
+
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -32,7 +33,8 @@ public class JwtService {
         boolean isTokenLoggedout = tokenRepository.findByToken(token)
                 .map(t -> !t.isLoggedout()).orElse(false);
 
-        return (username.equals(user.getUsername())) && !isTokenExpired(token) && isTokenLoggedout;
+        return (username.equals(user.getUsername())) 
+            && !isTokenExpired(token) && isTokenLoggedout;
     }
 
     private boolean isTokenExpired(String token) {

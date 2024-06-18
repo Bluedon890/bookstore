@@ -1,7 +1,7 @@
-package stevenlan.bookstore.jwt.filter;
+package stevenlan.bookstore.filter;
 
-import stevenlan.bookstore.jwt.service.JwtService;
 import stevenlan.bookstore.serviceImpl.EmployeesDetailsService;
+import stevenlan.bookstore.serviceImpl.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
