@@ -81,7 +81,7 @@ public class BooksServiceImpl implements BooksService {
             return new BooksResponse(null, null, "請輸入正確書名");
         }
         //判斷是否已存在書本(同名)
-        Optional<Books> presentBook = booksRepository.findBooksByTitle(booksRequest.getTitle());
+        Optional<Books> presentBook = booksRepository.findByTitle(booksRequest.getTitle());
         if (presentBook.isPresent()) {
             return new BooksResponse(null,
                     Arrays.asList(booksToBooksDto(presentBook.orElseThrow())), "此書本已存在");
@@ -92,7 +92,7 @@ public class BooksServiceImpl implements BooksService {
                 null,
                 Arrays.asList(booksToBooksDto(
                     
-                    booksRepository.findBooksByTitle(booksRequest.getTitle()).orElseThrow())),
+                    booksRepository.findByTitle(booksRequest.getTitle()).orElseThrow())),
                 "新增完成");
     }
 

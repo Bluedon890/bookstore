@@ -1,7 +1,6 @@
 package stevenlan.bookstore.controller;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -9,13 +8,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import stevenlan.bookstore.dto.EmployeesIdsRequestDto;
 import stevenlan.bookstore.dto.EmployeesResponse;
-import stevenlan.bookstore.dto.EmployeesUserUpdateDto;
-import stevenlan.bookstore.entity.Employees;
-import stevenlan.bookstore.repository.EmployeesRepository;
+import stevenlan.bookstore.dto.EmployeesUpdateRequest;
 import stevenlan.bookstore.service.EmlpoyeesService;
 
 
@@ -26,9 +22,6 @@ public class EmployeesController {
 
     private final EmlpoyeesService employeesService;
 
-    private final EmployeesRepository employeesRepository;
-
-    // 不輸入就是GetAll
     @PostMapping(value = "/get")
     public ResponseEntity<EmployeesResponse> getEmployees(
             @RequestBody EmployeesIdsRequestDto ids) {
@@ -36,18 +29,15 @@ public class EmployeesController {
     }
 
     @DeleteMapping(value = "/delete")
-    public String deleteEmployees(HttpServletRequest request) {
-        Employees employees = employeesRepository.findEmployeesByAccount(
-                SecurityContextHolder.getContext().getAuthentication().getName()).orElse(null);
-        employeesService.deleteEmployeeById(
-                employees.getId());
-        return ("您的帳號已刪除");
+    public ResponseEntity<EmployeesResponse> deleteEmployees(
+            @RequestBody EmployeesIdsRequestDto ids) {
+        return ResponseEntity.ok(employeesService.deleteEmployeesByIds(ids));
     }
 
     @PutMapping(value = "/update")
-    public ResponseEntity<EmployeesResponse> updateEmployees(@RequestBody EmployeesUserUpdateDto req) {
-
-        return ResponseEntity.ok(employeesService.userUpdateEmployee(req));
+    public ResponseEntity<EmployeesResponse> updateEmployees(
+            @RequestBody EmployeesUpdateRequest req) {
+        return ResponseEntity.ok(employeesService.updateEmployee(req));
 
     }
 

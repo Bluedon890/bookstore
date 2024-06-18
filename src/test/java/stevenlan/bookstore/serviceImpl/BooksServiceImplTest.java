@@ -57,7 +57,7 @@ public class BooksServiceImplTest {
 
         mock(BooksRepository.class);
 
-        when(booksRepository.findBooksByTitle("apple")).thenReturn(Optional.empty(),Optional.of(books));
+        when(booksRepository.findByTitle("apple")).thenReturn(Optional.empty(),Optional.of(books));
         
         when(booksRepository.save(books)).thenReturn(books);
         
@@ -72,7 +72,7 @@ public class BooksServiceImplTest {
         
         mock(BooksRepository.class);
 
-        when(booksRepository.findBooksByTitle("apple")).thenReturn(Optional.of(books));
+        when(booksRepository.findByTitle("apple")).thenReturn(Optional.of(books));
         
         when(booksRepository.save(books)).thenReturn(books);
         

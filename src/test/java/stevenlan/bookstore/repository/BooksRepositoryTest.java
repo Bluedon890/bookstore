@@ -32,14 +32,14 @@ public class BooksRepositoryTest {
     //成功找到
     @Test
     void testFindBooksByTitle_Found(){
-        Optional<Books> foundBooks= booksRepository.findBooksByTitle("apple");
+        Optional<Books> foundBooks= booksRepository.findByTitle("apple");
         assertThat(foundBooks.get().getAuthor()).isEqualTo(books.getAuthor());
         assertThat(foundBooks.get().getId()).isEqualTo(books.getId());
     }
     //失敗
     @Test
     void testFindBooksByTitle_NotFound(){
-        Optional<Books> foundBooks= booksRepository.findBooksByTitle("banana");
+        Optional<Books> foundBooks= booksRepository.findByTitle("banana");
         assertThat(foundBooks.isEmpty()).isTrue();
     }
 }
