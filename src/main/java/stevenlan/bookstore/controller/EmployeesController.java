@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 import stevenlan.bookstore.dto.EmployeesIdsRequestDto;
 import stevenlan.bookstore.dto.EmployeesResponse;
 import stevenlan.bookstore.dto.EmployeesUpdateRequest;
-import stevenlan.bookstore.service.EmlpoyeesService;
+import stevenlan.bookstore.service.EmployeesService;
 
 
 @RestController
@@ -20,7 +20,7 @@ import stevenlan.bookstore.service.EmlpoyeesService;
 @RequiredArgsConstructor
 public class EmployeesController {
 
-    private final EmlpoyeesService employeesService;
+    private final EmployeesService employeesService;
 
     @PostMapping(value = "/get")
     public ResponseEntity<EmployeesResponse> getEmployees(

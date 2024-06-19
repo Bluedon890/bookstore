@@ -16,11 +16,11 @@ import stevenlan.bookstore.dto.EmployeesResponse;
 import stevenlan.bookstore.dto.EmployeesUpdateRequest;
 import stevenlan.bookstore.entity.Employees;
 import stevenlan.bookstore.repository.EmployeesRepository;
-import stevenlan.bookstore.service.EmlpoyeesService;
+import stevenlan.bookstore.service.EmployeesService;
 
 @Service
 @RequiredArgsConstructor
-public class EmployeesServiceImpl implements EmlpoyeesService {
+public class EmployeesServiceImpl implements EmployeesService {
 
     private final EmployeesRepository employeesRepository;
 
@@ -42,8 +42,11 @@ public class EmployeesServiceImpl implements EmlpoyeesService {
             if (employeesRepository.findById(id).isPresent()) {
                 employees.add(employeeToEmployeeDto(employeesRepository.findById(id).orElseThrow()));
             } else {
+                if (nonExistId != "") {
+                    nonExistId += ", ";
+                }
                 nonExistId += id;
-                nonExistId += ", ";
+
             }
         }
         if (!nonExistId.isBlank()) {
@@ -59,7 +62,7 @@ public class EmployeesServiceImpl implements EmlpoyeesService {
                 .email(employee.getEmail()).phoneNumber(employee.getPhoneNumber()).roles(employee.getRole()).build();
     }
 
-    private Boolean getRoles(String role) {
+    protected Boolean getRoles(String role) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return authentication.getAuthorities().stream().anyMatch(authority -> authority.getAuthority().equals(role));
@@ -77,8 +80,10 @@ public class EmployeesServiceImpl implements EmlpoyeesService {
                 if (employeesRepository.findById(id).isPresent()) {
                     employeesRepository.deleteById(id);
                 } else {
+                    if (nonExistId != "") {
+                        nonExistId += ", ";
+                    }
                     nonExistId += id;
-                    nonExistId += ", ";
                 }
             }
             if (!nonExistId.isBlank()) {
@@ -93,7 +98,6 @@ public class EmployeesServiceImpl implements EmlpoyeesService {
             employeesRepository.deleteById(employee.getId());
             return new EmployeesResponse(null, employees, "您的帳號已刪除");
         }
-
     }
 
     // 更新指定資料
@@ -120,7 +124,7 @@ public class EmployeesServiceImpl implements EmlpoyeesService {
     }
 
     @Transactional
-    private EmployeesResponse update(Employees employees, EmployeesUpdateRequest req){
+    private EmployeesResponse update(Employees employees, EmployeesUpdateRequest req) {
         if (req.getName() != null && req.getName().length() > 0
                 && !Objects.equals(employees.getName(), req.getName())) {
             employees.setName(req.getName());
@@ -137,7 +141,7 @@ public class EmployeesServiceImpl implements EmlpoyeesService {
                 && !Objects.equals(employees.getPhoneNumber(), req.getPhoneNumber())) {
             employees.setPhoneNumber(req.getPhoneNumber());
         }
-        
+
         List<EmployeesDtoForResponse> employee = new ArrayList<>();
         employee.add(employeeToEmployeeDto(employees));
         return new EmployeesResponse(null, employee, "更新成功");

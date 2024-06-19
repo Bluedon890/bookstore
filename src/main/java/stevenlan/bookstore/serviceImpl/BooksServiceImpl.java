@@ -46,8 +46,10 @@ public class BooksServiceImpl implements BooksService {
             if (booksRepository.findById(id).isPresent()) {
                 booksDto.add(booksToBooksDto(booksRepository.findById(id).orElseThrow()));
             } else {
+                if(nonExistId!=""){
+                    nonExistId += ", ";
+                }
                 nonExistId += id;
-                nonExistId += ", ";
             }
             
         }
@@ -108,8 +110,10 @@ public class BooksServiceImpl implements BooksService {
             if (booksRepository.existsById(id)) {
                 booksRepository.deleteById(id);
             } else {
+                if(nonExistId!=""){
+                    nonExistId += ", ";
+                }
                 nonExistId += id;
-                nonExistId += ", ";
             }
         }
         if (!nonExistId.isBlank()) {
@@ -130,7 +134,7 @@ public class BooksServiceImpl implements BooksService {
         }
 
         // 應該能簡化 之後試
-        logger.info("id呢我Id呢???????????????????"+booksRequest.toString());
+        
         Books book = booksRepository.findById(booksRequest.getBookId()).orElse(null);
         if (book == null) {
             return new BooksResponse(

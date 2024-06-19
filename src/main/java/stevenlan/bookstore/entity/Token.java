@@ -18,7 +18,7 @@ public class Token {
     private boolean loggedout;
 
     @ManyToOne
-    @JoinColumn(name = "employees_id")
+    @JoinColumn(name = "employees_id", referencedColumnName = "id")
     private Employees employees;
 
     public Integer getId() {

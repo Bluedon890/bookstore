@@ -11,31 +11,31 @@ import stevenlan.bookstore.entity.Employees;
 import stevenlan.bookstore.entity.Role;
 import stevenlan.bookstore.repository.EmployeesRepository;
 
-@Configuration
-@RequiredArgsConstructor
-public class EmployeesConfig {
+// @Configuration
+// @RequiredArgsConstructor
+// public class EmployeesConfig {
 
-    private final PasswordEncoder passwordEncoder;
+//     private final PasswordEncoder passwordEncoder;
 
-    @Bean
-    CommandLineRunner commandLineRunner(
-        EmployeesRepository eRepository
-    ){
-        return args ->{
-            Employees steven = new Employees(
-				"2400398",
-				passwordEncoder.encode("000000"),
-				"steven",
-				"2400398@systex.com.tw",
-				"123465789",
-                List.of(Role.PEOPLE_MANAGER, Role.BOOK_MANAGER)
-			);
+//     @Bean
+//     CommandLineRunner commandLineRunner(
+//         EmployeesRepository eRepository
+//     ){
+//         return args ->{
+//             Employees steven = new Employees(
+// 				"2400398",
+// 				passwordEncoder.encode("000000"),
+// 				"steven",
+// 				"2400398@systex.com.tw",
+// 				"123465789",
+//                 List.of(Role.PEOPLE_MANAGER, Role.BOOK_MANAGER)
+// 			);
 
 
-            eRepository.saveAll(
-                List.of(steven)
-            );
-        };
-    }
+//             eRepository.saveAll(
+//                 List.of(steven)
+//             );
+//         };
+//     }
 
-}
+// }

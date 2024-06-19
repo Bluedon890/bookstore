@@ -4,7 +4,7 @@ import stevenlan.bookstore.dto.EmployeesIdsRequestDto;
 import stevenlan.bookstore.dto.EmployeesResponse;
 import stevenlan.bookstore.dto.EmployeesUpdateRequest;
 
-public interface EmlpoyeesService {
+public interface EmployeesService {
 
     public EmployeesResponse getEmployeesByIds(EmployeesIdsRequestDto EmployeesRequest);
 

@@ -16,7 +16,7 @@ public class Employees implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "員工id")
+    @Column(name = "id")
     private Long id;
 
     @Column(name = "帳號", nullable = false, unique = true, length = 50)
