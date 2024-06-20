@@ -51,7 +51,6 @@ public class BooksServiceImpl implements BooksService {
                 }
                 nonExistId += id;
             }
-            
         }
         if (!nonExistId.isBlank()) {
             return new BooksResponse(null,

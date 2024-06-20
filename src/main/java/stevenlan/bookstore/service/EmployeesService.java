@@ -11,5 +11,4 @@ public interface EmployeesService {
     public EmployeesResponse deleteEmployeesByIds(EmployeesIdsRequestDto EmployeesRequest);
 
     public EmployeesResponse updateEmployee(EmployeesUpdateRequest EmployeesRequest);
-     
 }

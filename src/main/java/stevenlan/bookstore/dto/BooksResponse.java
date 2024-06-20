@@ -6,7 +6,6 @@ public class BooksResponse {
 
     private String token;
     
-    
     private List<BooksDto> books;
 
     private String message;

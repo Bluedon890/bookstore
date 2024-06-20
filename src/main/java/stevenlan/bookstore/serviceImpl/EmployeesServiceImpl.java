@@ -62,7 +62,7 @@ public class EmployeesServiceImpl implements EmployeesService {
                 .email(employee.getEmail()).phoneNumber(employee.getPhoneNumber()).roles(employee.getRole()).build();
     }
 
-    protected Boolean getRoles(String role) {
+    private boolean getRoles(String role) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return authentication.getAuthorities().stream().anyMatch(authority -> authority.getAuthority().equals(role));
