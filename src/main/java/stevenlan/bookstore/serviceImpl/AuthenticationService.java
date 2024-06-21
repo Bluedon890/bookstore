@@ -118,7 +118,7 @@ public class AuthenticationService {
     }
 
     // 存token
-    public void saveEmployeesToken(String jwt, Employees employees) {
+    private void saveEmployeesToken(String jwt, Employees employees) {
         Token token = new Token();
         token.setToken(jwt);
         token.setLoggedout(false);
@@ -127,7 +127,7 @@ public class AuthenticationService {
     }
 
     // 在產生新token前將舊的設定為loggedout
-    public void setAllOldTokenLoggedout(Employees employees) {
+    private void setAllOldTokenLoggedout(Employees employees) {
         List<Token> validTokensList = tokenRepository.findAllTokenByEmployee(employees.getId());
         if (!validTokensList.isEmpty()) {
             validTokensList.forEach(t -> {

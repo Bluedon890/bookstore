@@ -45,7 +45,7 @@ public class JwtService {
         return extractClaim(token, Claims::getExpiration);
     }
 
-    public <T> T extractClaim(String token, Function<Claims, T> resolver) {
+    private <T> T extractClaim(String token, Function<Claims, T> resolver) {
         Claims claims = extractAllClaims(token);
         return resolver.apply(claims);
     }
@@ -76,8 +76,5 @@ public class JwtService {
     private SecretKey getSigninKey() {
         byte[] keyBytes = Decoders.BASE64URL.decode(SECRET_KEY);
         return Keys.hmacShaKeyFor(keyBytes);
-    }
-
-
-    
+    }  
 }

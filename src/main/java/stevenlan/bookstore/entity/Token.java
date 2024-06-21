@@ -1,9 +1,13 @@
 package stevenlan.bookstore.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "token")
+@AllArgsConstructor
+@NoArgsConstructor
 public class Token {
 
     @Id
