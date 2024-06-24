@@ -51,7 +51,8 @@ public class SecurityConfig {
                 .userDetailsService(empServiceImp)
                 .exceptionHandling(e -> e
                         .accessDeniedHandler(customAccessDeniedHandler)
-                        .authenticationEntryPoint(customAuthenticationEntryPoint))
+                        .authenticationEntryPoint(customAuthenticationEntryPoint)
+                        )
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)

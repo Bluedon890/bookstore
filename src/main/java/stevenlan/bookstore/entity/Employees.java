@@ -56,7 +56,17 @@ public class Employees implements UserDetails {
         this.phoneNumber = phoneNumber;
         this.roles = roles;
         this.tokens = tokens;
-
+    }
+    
+    public Employees(Long id, String account, String password, String name, String email, String phoneNumber,
+            List<Role> roles) {
+        this.id = id;
+        this.account = account;
+        this.password = password;
+        this.name = name;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.roles = roles;
     }
 
     public Employees(String account, String password, String name, String email, String phoneNumber, List<Role> roles) {
@@ -66,7 +76,6 @@ public class Employees implements UserDetails {
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.roles = roles;
-
     }
 
     public Employees(String account, String password, String name, String email, String phoneNumber) {

@@ -57,4 +57,10 @@ public class Token {
         this.employees = employees;
     }
 
+    public Token(String token, boolean loggedout, Employees employees) {
+        this.token = token;
+        this.loggedout = loggedout;
+        this.employees = employees;
+    }
+
 }
