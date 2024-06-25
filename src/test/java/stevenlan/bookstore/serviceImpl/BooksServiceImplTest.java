@@ -60,6 +60,7 @@ public class BooksServiceImplTest {
     }
 
     //新增成功
+    @SuppressWarnings("unchecked")
     @Test
     void testAddNewBooks_NoExistBook() {
 

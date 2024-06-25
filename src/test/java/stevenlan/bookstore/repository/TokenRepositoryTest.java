@@ -2,8 +2,6 @@ package stevenlan.bookstore.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.Optional;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,7 +10,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import stevenlan.bookstore.entity.Employees;
 import stevenlan.bookstore.entity.Token;
-import stevenlan.bookstore.serviceImpl.JwtService;
 //doesnt matter
 @DataJpaTest
 public class TokenRepositoryTest {
@@ -23,8 +20,6 @@ public class TokenRepositoryTest {
     @Autowired 
     private EmployeesRepository employeesRepository;
 
-    // @Autowired
-    // JwtService jwtService;
     Token token;
     Employees employees;
 
@@ -46,7 +41,6 @@ public class TokenRepositoryTest {
 
     @Test
     void testFindAllTokenByEmployee() {
-        // jwtService.generateToken(employees);
         assertThat(tokenRepository.findAllTokenByEmployee(employees.getId()).get(0).getEmployees().getAccount()).isEqualTo(employees.getAccount());
        
     }
